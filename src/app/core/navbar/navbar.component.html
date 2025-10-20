@@ -1,0 +1,13 @@
+<nav class="navbar">
+  <div class="navbar-left">
+    <a routerLink="/" class="brand-title">Skill<span>Up</span></a>
+    <a routerLink="/courses" *ngIf="authService.isAuthenticated()" class="nav-link">Courses</a>
+  </div>
+
+  <div class="auth-links">
+    <a routerLink="/auth/login" *ngIf="!authService.isAuthenticated()" class="btn-link">Login</a>
+    <a routerLink="/auth/register" *ngIf="!authService.isAuthenticated()" class="btn-link register-btn">Register</a>
+    <a (click)="logout()" *ngIf="authService.isAuthenticated()" class="btn-link logout-btn">Logout</a>
+  </div>
+
+</nav>

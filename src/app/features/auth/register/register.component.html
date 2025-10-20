@@ -1,0 +1,81 @@
+<div class="register-container">
+  <div class="register-card">
+    <div class="logo-area">
+      <h1 class="brand-title">Skill<span>Up</span></h1>
+    </div>
+
+    <h2>Create your account</h2>
+    <p class="subtitle">Join us and start learning today</p>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <!-- USERNAME -->
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input
+          id="username"
+          type="text"
+          formControlName="username"
+          placeholder="Enter your username"
+        />
+        <div class="field-error" *ngIf="isInvalid('username')">
+          <span *ngIf="registerForm.get('username')?.errors?.['required']">
+            Username is required.
+          </span>
+          <span *ngIf="registerForm.get('username')?.errors?.['minlength']">
+            Username must be at least 3 characters.
+          </span>
+        </div>
+      </div>
+
+      <!-- EMAIL -->
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          placeholder="Enter your email"
+        />
+        <div class="field-error" *ngIf="isInvalid('email')">
+          <span *ngIf="registerForm.get('email')?.errors?.['required']">
+            Email is required.
+          </span>
+          <span *ngIf="registerForm.get('email')?.errors?.['email']">
+            Please enter a valid email address.
+          </span>
+        </div>
+      </div>
+
+      <!-- PASSWORD -->
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          id="password"
+          type="password"
+          formControlName="password"
+          placeholder="Create a password"
+        />
+        <div class="field-error" *ngIf="isInvalid('password')">
+          <span *ngIf="registerForm.get('password')?.errors?.['required']">
+            Password is required.
+          </span>
+          <span *ngIf="registerForm.get('password')?.errors?.['minlength']">
+            Password must be at least 6 characters.
+          </span>
+        </div>
+      </div>
+
+      <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </div>
+
+      <button type="submit" [disabled]="registerForm.invalid || registerForm.pristine">
+        Sign Up
+      </button>
+    </form>
+
+    <p class="login-text">
+      Already have an account? <a routerLink="/auth/login">Sign In</a>
+    </p>
+  </div>
+</div>

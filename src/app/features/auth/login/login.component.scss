@@ -1,0 +1,248 @@
+// ================================
+// 🎯 SkillUp Login Page Styles
+// ================================
+
+// 🎨 Color Palette
+$primary-color: #4f46e5;   // Indigo
+$secondary-color: #6366f1; // Lighter Indigo
+$bg-gradient: linear-gradient(135deg, #eef2ff 0%, #f5f3ff 100%);
+$card-bg: rgba(255, 255, 255, 0.9);
+$input-bg: #ffffff;
+$input-border: #d1d5db;
+$error-color: #dc2626;     // Red
+$text-muted: #6b7280;
+
+// ================================
+// 🧭 Layout Container
+// ================================
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: $bg-gradient;
+  padding: 1rem;
+
+  // ==============================
+  // 🪪 Login Card
+  // ==============================
+  .login-card {
+    backdrop-filter: blur(10px);
+    background: $card-bg;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 3rem 3rem 2.5rem;
+    border-radius: 1.25rem;
+    box-shadow: 0 12px 32px rgba(79, 70, 229, 0.1);
+    width: 100%;
+    max-width: 420px;
+    text-align: center;
+    transition: all 0.3s ease;
+
+    &:hover {
+      box-shadow: 0 16px 40px rgba(79, 70, 229, 0.15);
+      transform: translateY(-2px);
+    }
+
+    // ============================
+    // 🔤 Brand Title
+    // ============================
+    .logo-area {
+      margin-bottom: 2rem;
+
+      .brand-title {
+        font-family: 'Poppins', 'Inter', sans-serif;
+        font-size: 3rem; // ⬆️ Much bigger
+        font-weight: 800;
+        letter-spacing: -1px;
+        line-height: 1.1;
+        user-select: none;
+        margin: 0;
+
+        background: linear-gradient(90deg, $primary-color, $secondary-color);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+
+        span {
+          color: $secondary-color;
+        }
+
+        // Subtle text shadow for depth
+        text-shadow: 0 4px 12px rgba(79, 70, 229, 0.15);
+      }
+    }
+
+    // ============================
+    // 🏷️ Title and Subtitle
+    // ============================
+    h2 {
+      color: #111827;
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .subtitle {
+      font-size: 0.95rem;
+      color: $text-muted;
+      margin-bottom: 2rem;
+    }
+
+    // ============================
+    // 📝 Form Styles
+    // ============================
+    form {
+      display: flex;
+      flex-direction: column;
+
+      .form-group {
+        text-align: left;
+        margin-bottom: 1.25rem;
+
+        label {
+          display: block;
+          font-weight: 500;
+          margin-bottom: 0.35rem;
+          color: #374151;
+          font-size: 0.95rem;
+        }
+
+        input {
+          width: 100%;
+          padding: 0.75rem 1rem;
+          border-radius: 0.75rem;
+          border: 1px solid $input-border;
+          background-color: $input-bg;
+          font-size: 1rem;
+          transition: all 0.2s ease;
+          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+
+          &:focus {
+            outline: none;
+            border-color: $primary-color;
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15);
+          }
+        }
+      }
+
+      .error-message {
+        color: $error-color;
+        font-size: 0.875rem;
+        margin-bottom: 1rem;
+        text-align: left;
+      }
+
+      // Center the Sign In button properly
+      button {
+        align-self: center; 
+        width: 100%;        
+        max-width: 100%;
+        background-color: $primary-color;
+        color: white;
+        padding: 0.875rem;
+        border: none;
+        border-radius: 0.75rem;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        letter-spacing: 0.3px;
+
+        &:hover {
+          background-color: darken($primary-color, 3%);
+          box-shadow: 0 4px 10px rgba(79, 70, 229, 0.2);
+        }
+
+        &:disabled {
+          background-color: #c7d2fe;
+          cursor: not-allowed;
+        }
+      }
+    }
+
+    // ============================
+    // 👤 Signup Text
+    // ============================
+    .signup-text {
+      margin-top: 1.75rem;
+      font-size: 0.9rem;
+      color: $text-muted;
+
+      a {
+        color: $primary-color;
+        font-weight: 500;
+        transition: color 0.2s;
+
+        &:hover {
+          color: $secondary-color;
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}
+
+// ================================
+// 🌙 Optional Dark Mode (auto)
+// ================================
+@media (prefers-color-scheme: dark) {
+  .login-container {
+    background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+
+    .login-card {
+      background: rgba(30, 27, 75, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #f9fafb;
+
+      h2 {
+        color: #f9fafb;
+      }
+
+      label {
+        color: #e5e7eb;
+      }
+
+      input {
+        background-color: rgba(255, 255, 255, 0.05);
+        color: #f3f4f6;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+
+        &::placeholder {
+          color: #9ca3af;
+        }
+      }
+
+      button {
+        background-color: $secondary-color;
+
+        &:hover {
+          background-color: lighten($secondary-color, 5%);
+        }
+      }
+
+      .signup-text {
+        color: #d1d5db;
+      }
+    }
+
+    .brand-title {
+      text-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+    }
+  }
+}
+.field-error {
+  font-size: 0.8rem;
+  color: $error-color;
+  margin-top: 0.25rem;
+  text-align: left;
+  min-height: 1rem;
+  line-height: 1.2;
+
+  span {
+    display: block;
+  }
+}
+
+input.ng-invalid.ng-touched {
+  border-color: $error-color;
+  box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.1);
+}

@@ -1,0 +1,63 @@
+<div class="login-container">
+  <div class="login-card">
+    <div class="logo-area">
+      <h1 class="brand-title">Skill<span>Up</span></h1>
+    </div>
+
+    <h2>Welcome Back</h2>
+    <p class="subtitle">Log in to continue</p>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <!-- USERNAME / EMAIL -->
+      <div class="form-group">
+        <label for="usernameOrEmail">Username or Email</label>
+        <input
+          id="usernameOrEmail"
+          type="text"
+          formControlName="usernameOrEmail"
+          placeholder="Enter your username or email"
+        />
+
+        <div class="field-error" *ngIf="isInvalid('usernameOrEmail')">
+          <span *ngIf="loginForm.get('usernameOrEmail')?.errors?.['required']">
+            Username or email is required.
+          </span>
+        </div>
+      </div>
+
+      <!-- PASSWORD -->
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          id="password"
+          type="password"
+          formControlName="password"
+          placeholder="Enter your password"
+        />
+
+        <div class="field-error" *ngIf="isInvalid('password')">
+          <span *ngIf="loginForm.get('password')?.errors?.['required']">
+            Password is required.
+          </span>
+          <span *ngIf="loginForm.get('password')?.errors?.['minlength']">
+            Password must be at least 6 characters.
+          </span>
+        </div>
+      </div>
+
+      <!-- SERVER ERROR -->
+      <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </div>
+
+      <button type="submit" [disabled]="loginForm.invalid || loginForm.pristine">
+        Login
+      </button>
+    </form>
+
+    <p class="signup-text">
+      Don’t have an account?
+      <a routerLink="/auth/register">Sign up</a>
+    </p>
+  </div>
+</div>
