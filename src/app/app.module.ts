@@ -4,25 +4,17 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NavbarComponent } from './core/navbar/navbar.component';
-import { JwtInterceptor } from './core/interceptors/jwt.interceptor';
-import { DateInputsModule } from '@progress/kendo-angular-dateinputs';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
-
-
+import { JwtInterceptor } from './core/interceptors/jwt.interceptor'; // adjust path
 
 @NgModule({
   declarations: [
     AppComponent,
-    NavbarComponent,
-    MainLayoutComponent
+    NavbarComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule,
-    DateInputsModule,
-    BrowserAnimationsModule
+    HttpClientModule
   ],
   providers: [
     {
