@@ -9,14 +9,14 @@ const routes: Routes = [
       import('./features/auth/auth.module').then(m => m.AuthModule),
   },
   {
-    path: 'courses',
-    loadChildren: () =>
-      import('./features/courses/courses.module').then(m => m.CoursesModule),
-  },
-  {
     path: 'profile',
     loadChildren: () =>
       import('./features/profile/profile.module').then(m => m.ProfileModule),
+  }, 
+  {
+    path: 'courses', // 👈 нов маршрут за Courses модул
+    loadChildren: () =>
+      import('./features/courses/courses.module').then(m => m.CoursesModule),
   },
   { path: '**', redirectTo: 'auth/login' }, // fallback
 ];

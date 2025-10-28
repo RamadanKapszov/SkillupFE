@@ -1,0 +1,23 @@
+<div class="courses-container">
+  <h1 class="title">Нашите курсове</h1>
+
+  <div *ngIf="loading" class="loading">Зареждане...</div>
+  <div *ngIf="error" class="error">{{ error }}</div>
+
+  <div class="courses-grid" *ngIf="!loading && courses.length">
+    <div class="course-card" *ngFor="let course of courses">
+      <div class="course-header">
+        <h2>{{ course.title }}</h2>
+        <span class="category">{{ course.categoryName }}</span>
+      </div>
+      <p class="description">{{ course.description }}</p>
+      <div class="meta">
+        <span>Учител: {{ course.teacherName }}</span>
+        <span>Уроци: {{ course.lessonsCount || 0 }}</span>
+      </div>
+        <button [routerLink]="['/courses', course.id]" class="btn-details">
+        Виж подробности
+        </button>
+</div>
+  </div>
+</div>
