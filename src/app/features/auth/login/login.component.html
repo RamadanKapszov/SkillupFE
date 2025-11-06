@@ -1,63 +1,54 @@
-<div class="login-container">
-  <div class="login-card">
-    <div class="logo-area">
-      <h1 class="brand-title">Skill<span>Up</span></h1>
-    </div>
+<div class="auth-container">
+  <div class="auth-card">
+    <h1>SkillUp</h1>
+    <h2>Вход в акаунта</h2>
 
-    <h2>Welcome Back</h2>
-    <p class="subtitle">Log in to continue</p>
-
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-      <!-- USERNAME / EMAIL -->
+    <form [formGroup]="form" (ngSubmit)="submit()">
       <div class="form-group">
-        <label for="usernameOrEmail">Username or Email</label>
+        <label for="usernameOrEmail">Имейл или потребителско име</label>
         <input
           id="usernameOrEmail"
           type="text"
           formControlName="usernameOrEmail"
-          placeholder="Enter your username or email"
+          placeholder="user@example.com"
         />
-
-        <div class="field-error" *ngIf="isInvalid('usernameOrEmail')">
-          <span *ngIf="loginForm.get('usernameOrEmail')?.errors?.['required']">
-            Username or email is required.
-          </span>
+        <div
+          class="error"
+          *ngIf="
+            form.controls.usernameOrEmail.touched &&
+            form.controls.usernameOrEmail.invalid
+          "
+        >
+          Задължително поле.
         </div>
       </div>
 
-      <!-- PASSWORD -->
       <div class="form-group">
-        <label for="password">Password</label>
+        <label for="password">Парола</label>
         <input
           id="password"
           type="password"
           formControlName="password"
-          placeholder="Enter your password"
+          placeholder="••••••"
         />
-
-        <div class="field-error" *ngIf="isInvalid('password')">
-          <span *ngIf="loginForm.get('password')?.errors?.['required']">
-            Password is required.
-          </span>
-          <span *ngIf="loginForm.get('password')?.errors?.['minlength']">
-            Password must be at least 6 characters.
-          </span>
+        <div
+          class="error"
+          *ngIf="
+            form.controls.password.touched && form.controls.password.invalid
+          "
+        >
+          Въведете парола.
         </div>
       </div>
 
-      <!-- SERVER ERROR -->
-      <div *ngIf="errorMessage" class="error-message">
-        {{ errorMessage }}
-      </div>
-
-      <button type="submit" [disabled]="loginForm.invalid || loginForm.pristine">
-        Login
+      <button type="submit" [disabled]="form.invalid || loading">
+        {{ loading ? "Влизане..." : "Вход" }}
       </button>
-    </form>
 
-    <p class="signup-text">
-      Don’t have an account?
-      <a routerLink="/auth/register">Sign up</a>
-    </p>
+      <p class="register-text">
+        Нямате акаунт?
+        <a routerLink="/auth/register">Регистрирайте се</a>
+      </p>
+    </form>
   </div>
 </div>

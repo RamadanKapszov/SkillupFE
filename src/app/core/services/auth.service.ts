@@ -1,49 +1,129 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
-import { AuthResponse } from '../models/auth-response.dto';
-import { environment } from 'src/environments/environment';
+import { Router } from '@angular/router';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
-@Injectable({
-  providedIn: 'root'
-})
+export interface AuthUser {
+  id: string;
+  email: string;
+  fullName: string;
+  role: 'Admin' | 'Teacher' | 'Student';
+}
+
+@Injectable({ providedIn: 'root' })
 export class AuthService {
-  private apiUrl = `${environment.apiUrl}/auth`;  // 🟢 смени с реалния бекенд URL
+  private readonly TOKEN_KEY = 'skillup.token';
+  private readonly USER_KEY = 'skillup.user';
+  private jwt = new JwtHelperService();
+  private _currentUser: AuthUser | null = null;
 
-  constructor(private http: HttpClient) {}
-
-  login(usernameOrEmail: string, password: string): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/login`, { usernameOrEmail, password })
-      .pipe(tap(res => {
-        localStorage.setItem('token', res.token);
-        localStorage.setItem('user', JSON.stringify(res.user));
-      }));
+  constructor(private router: Router) {
+    this.tryLoadUserFromStorage();
   }
 
-  register(data: { username: string; email: string; password: string }): Observable<AuthResponse> {
-  return this.http.post<AuthResponse>(`${this.apiUrl}/register`, data)
-    .pipe(
-      tap(res => {
-        localStorage.setItem('token', res.token);
-        localStorage.setItem('user', JSON.stringify(res.user));
-      })
-    );
+  // ===========================
+  // 🔑 TOKEN MANAGEMENT
+  // ===========================
+
+  setToken(token: string) {
+    localStorage.setItem(this.TOKEN_KEY, token);
+    this.decodeTokenAndStoreUser(token);
   }
+
   getToken(): string | null {
-    return localStorage.getItem('token');
+    return localStorage.getItem(this.TOKEN_KEY);
   }
 
-  getCurrentUser() {
-    const user = localStorage.getItem('user');
-    return user ? JSON.parse(user) : null;
+  clearToken() {
+    localStorage.removeItem(this.TOKEN_KEY);
   }
+
+  // ===========================
+  // 👤 USER MANAGEMENT
+  // ===========================
+
+  setCurrentUser(user: AuthUser) {
+    this._currentUser = user;
+    localStorage.setItem(this.USER_KEY, JSON.stringify(user));
+  }
+
+  get currentUser(): AuthUser | null {
+    if (this._currentUser) return this._currentUser;
+
+    const raw = localStorage.getItem(this.USER_KEY);
+    if (!raw) return null;
+    try {
+      this._currentUser = JSON.parse(raw) as AuthUser;
+      return this._currentUser;
+    } catch {
+      return null;
+    }
+  }
+
+  get userRole(): AuthUser['role'] | null {
+    return this.currentUser?.role ?? null;
+  }
+
+  clearCurrentUser() {
+    this._currentUser = null;
+    localStorage.removeItem(this.USER_KEY);
+  }
+
+  // ===========================
+  // ✅ AUTH STATE
+  // ===========================
 
   isAuthenticated(): boolean {
-    return !!this.getToken();
+    const token = this.getToken();
+    return !!token && !this.jwt.isTokenExpired(token);
   }
 
-  logout(): void {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+  isLoggedIn(): boolean {
+    return this.isAuthenticated();
+  }
+
+  hasRole(...roles: Array<AuthUser['role']>): boolean {
+    const user = this.currentUser;
+    return !!user && roles.includes(user.role);
+  }
+
+  logout() {
+    this.clearToken();
+    this.clearCurrentUser();
+    this.router.navigate(['/auth/login']);
+  }
+
+  // ===========================
+  // 🔍 HELPERS
+  // ===========================
+
+  private tryLoadUserFromStorage() {
+    const token = this.getToken();
+    if (token && !this.jwt.isTokenExpired(token)) {
+      if (!this.currentUser) {
+        this.decodeTokenAndStoreUser(token);
+      }
+    } else {
+      this.logout();
+    }
+  }
+
+  private decodeTokenAndStoreUser(token: string) {
+    try {
+      const decoded: any = this.jwt.decodeToken(token);
+      const user: AuthUser = {
+        id: decoded.nameid || decoded.sub || '',
+        email: decoded.email || '',
+        fullName: decoded.fullName || decoded.unique_name || '',
+        role:
+          decoded.role ||
+          decoded[
+            'http://schemas.microsoft.com/ws/2008/06/identity/claims/role'
+          ] ||
+          'Student',
+      };
+      this.setCurrentUser(user);
+    } catch (err) {
+      console.error('Error decoding token', err);
+    }
   }
 }

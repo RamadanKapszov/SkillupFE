@@ -1,13 +1,48 @@
 <nav class="navbar">
-  <div class="navbar-left">
-    <a routerLink="/" class="brand-title">Skill<span>Up</span></a>
-    <a routerLink="/courses" *ngIf="authService.isAuthenticated()" class="nav-link">Courses</a>
-  </div>
+  <div class="nav-content">
+    <!-- 🔹 Лого -->
+    <a routerLink="/" class="brand">
+      <span class="brand-icon">🎓</span> SkillUp
+    </a>
 
-  <div class="auth-links">
-    <a routerLink="/auth/login" *ngIf="!authService.isAuthenticated()" class="btn-link">Login</a>
-    <a routerLink="/auth/register" *ngIf="!authService.isAuthenticated()" class="btn-link register-btn">Register</a>
-    <a (click)="logout()" *ngIf="authService.isAuthenticated()" class="btn-link logout-btn">Logout</a>
-  </div>
+    <!-- 🔹 Навигационни линкове -->
+    <ul class="nav-links" [class.open]="isMenuOpen">
+      <li>
+        <a routerLink="/courses" routerLinkActive="active">Курсове</a>
+      </li>
+      <li *ngIf="auth.userRole === 'Teacher'">
+        <a routerLink="/courses/manage" routerLinkActive="active"
+          >Моите курсове</a
+        >
+      </li>
+      <li *ngIf="auth.userRole === 'Admin'">
+        <a routerLink="/admin" routerLinkActive="active">Админ панел</a>
+      </li>
+    </ul>
 
+    <!-- 🔹 Дясна зона -->
+    <div class="nav-right">
+      <ng-container *ngIf="auth.isLoggedIn(); else guest">
+        <div class="profile" (click)="toggleMenu()">
+          <div class="avatar">
+            {{ auth.currentUser?.fullName?.[0] || "?" }}
+          </div>
+          <span class="username">
+            {{ auth.currentUser?.fullName }}
+          </span>
+        </div>
+        <button class="logout-btn" (click)="logout()">Изход</button>
+      </ng-container>
+
+      <ng-template #guest>
+        <a routerLink="/auth/login" class="btn-login">Вход</a>
+        <a routerLink="/auth/register" class="btn-register">Регистрация</a>
+      </ng-template>
+    </div>
+
+    <!-- 🔹 Mobile Menu Button -->
+    <button class="menu-btn" (click)="toggleMenu()">
+      <span class="material-icons">menu</span>
+    </button>
+  </div>
 </nav>

@@ -1,0 +1,134 @@
+.toast-container {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  z-index: 2000;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 280px;
+  max-width: 380px;
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.15);
+  color: #222;
+  overflow: hidden;
+  position: relative;
+  animation: fadeInUp 0.4s ease, fadeOut 0.4s ease 3.3s forwards;
+  border-left: 5px solid transparent;
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+
+  .icon {
+    font-size: 1.4rem;
+  }
+
+  .content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+
+    .message {
+      font-weight: 500;
+      font-size: 0.95rem;
+      line-height: 1.2;
+    }
+
+    .progress-bar {
+      position: relative;
+      width: 100%;
+      height: 3px;
+      background: rgba(0, 0, 0, 0.08);
+      border-radius: 2px;
+      overflow: hidden;
+
+      &::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 100%;
+        transform-origin: left;
+        animation: progress 3.3s linear forwards;
+      }
+    }
+  }
+
+  .close-btn {
+    border: none;
+    background: none;
+    color: inherit;
+    font-size: 1.2rem;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  &.success {
+    border-color: #4caf50;
+    .progress-bar::before {
+      background: #4caf50;
+    }
+  }
+  &.error {
+    border-color: #f44336;
+    .progress-bar::before {
+      background: #f44336;
+    }
+  }
+  &.info {
+    border-color: #2196f3;
+    .progress-bar::before {
+      background: #2196f3;
+    }
+  }
+  &.warning {
+    border-color: #ff9800;
+    .progress-bar::before {
+      background: #ff9800;
+    }
+  }
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes progress {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
+  }
+}

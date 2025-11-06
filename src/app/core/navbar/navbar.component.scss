@@ -1,188 +1,184 @@
-// ================================
-// Variables
-// ================================
-$navbar-bg: #1f2937;          // Dark gray-blue
-$navbar-text: #f9fafb;        // Light text
-$navbar-link-hover: #3b82f6;  // Blue hover
-$navbar-padding: 0.75rem 2rem;
-$navbar-font-size: 1rem;
-$navbar-height: 60px;
-$brand-gradient: linear-gradient(90deg, #4f46e5, #6366f1);
-
-// ================================
-// Navbar Styles
-// ================================
 .navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: $navbar-padding;
-  background-color: $navbar-bg;
-  color: $navbar-text;
-  font-size: $navbar-font-size;
-  font-weight: 500;
-  height: $navbar-height;
+  background: #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  padding: 0.5rem 1.5rem;
   position: sticky;
   top: 0;
   z-index: 1000;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 
-  // ==========================
-  // Left section (logo + links)
-  // ==========================
-  .navbar-left {
+  .nav-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .brand {
     display: flex;
     align-items: center;
+    gap: 0.4rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #3f51b5;
+    text-decoration: none;
 
-    .brand-title {
-      font-family: 'Poppins', 'Inter', sans-serif;
-      font-weight: 800;
-      font-size: 1.5rem;
-      letter-spacing: -0.5px;
-      margin-right: 2rem;
-      background: $brand-gradient;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      transition: transform 0.2s ease;
-
-      &:hover {
-        transform: scale(1.05);
-      }
-
-      span {
-        color: #6366f1;
-      }
+    .brand-icon {
+      font-size: 1.3rem;
     }
 
-    .nav-link {
-      color: $navbar-text;
+    &:hover {
+      color: #2c3aa7;
+    }
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    gap: 1.5rem;
+
+    li a {
       text-decoration: none;
-      margin-right: 1.5rem;
+      color: #444;
+      font-weight: 500;
+      font-size: 0.95rem;
       position: relative;
-      transition: color 0.3s ease;
-
-      &:hover {
-        color: $navbar-link-hover;
-
-        &::after {
-          width: 100%;
-        }
-      }
+      transition: color 0.25s;
 
       &::after {
-        content: '';
+        content: "";
         position: absolute;
-        bottom: -4px;
-        left: 0;
-        width: 0;
+        width: 0%;
         height: 2px;
-        background: $navbar-link-hover;
-        transition: width 0.3s ease;
-        border-radius: 2px;
+        bottom: -3px;
+        left: 0;
+        background: #3f51b5;
+        transition: width 0.25s;
+      }
+
+      &:hover::after,
+      &.active::after {
+        width: 100%;
+      }
+
+      &:hover {
+        color: #3f51b5;
+      }
+    }
+
+    &.open {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      margin-top: 1rem;
+
+      li {
+        padding: 0.5rem 0;
       }
     }
   }
 
-  // ==========================
-  // Right section (auth links)
-  // ==========================
-  .auth-links {
+  .nav-right {
     display: flex;
     align-items: center;
+    gap: 1rem;
 
-    .nav-link {
-      margin-left: 1rem;
-      font-weight: 600;
+    .profile {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
 
-      &.register-btn {
-        background-color: $navbar-link-hover;
-        padding: 0.4rem 0.9rem;
-        border-radius: 0.5rem;
-        transition: background 0.2s ease;
-
-        &:hover {
-          background-color: lighten($navbar-link-hover, 10%);
-        }
+      .avatar {
+        background: #3f51b5;
+        color: white;
+        font-weight: 600;
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
 
-      &.logout-btn {
-        border: 1px solid rgba(255,255,255,0.3);
-        padding: 0.4rem 0.8rem;
-        border-radius: 0.5rem;
-        transition: all 0.2s ease;
+      .username {
+        font-weight: 500;
+        color: #333;
+      }
+    }
 
-        &:hover {
-          background-color: rgba(255,255,255,0.1);
-        }
+    .logout-btn {
+      background: #e53935;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 0.4rem 0.8rem;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: background 0.25s;
+
+      &:hover {
+        background: #c62828;
+      }
+    }
+
+    .btn-login,
+    .btn-register {
+      border-radius: 6px;
+      padding: 0.4rem 1rem;
+      font-weight: 500;
+      font-size: 0.9rem;
+      text-decoration: none;
+      transition: 0.25s;
+    }
+
+    .btn-login {
+      color: #3f51b5;
+      border: 1px solid #3f51b5;
+
+      &:hover {
+        background: #3f51b5;
+        color: white;
+      }
+    }
+
+    .btn-register {
+      background: #3f51b5;
+      color: white;
+      border: 1px solid #3f51b5;
+
+      &:hover {
+        background: #2c3aa7;
       }
     }
   }
-}
 
-// ================================
-// Responsive adjustments
-// ================================
-@media (max-width: 768px) {
-  .navbar {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 0.5rem 1rem;
-    height: auto;
+  .menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
 
-    .navbar-left {
+    .material-icons {
+      font-size: 28px;
+      color: #3f51b5;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .menu-btn {
+      display: block;
+    }
+
+    .nav-links {
+      display: none;
+    }
+
+    .nav-right {
       width: 100%;
-      margin-bottom: 0.5rem;
-
-      .nav-link {
-        margin-right: 1rem;
-      }
-    }
-
-    .auth-links {
-      width: 100%;
-      justify-content: flex-start;
-
-      .nav-link {
-        margin-left: 0.5rem;
-        margin-right: 0.5rem;
-      }
+      justify-content: center;
+      margin-top: 0.5rem;
+      flex-wrap: wrap;
     }
   }
 }
-
-$primary-light: #3b82f6; // light blue used elsewhere
-$navbar-text: #f9fafb;
-
-.btn-link {
-  display: inline-block;
-  background-color: $primary-light;
-  color: #ffffff;
-  padding: 0.4rem 0.9rem;
-  border-radius: 0.5rem;
-  font-weight: 600;
-  text-decoration: none;
-  font-size: 0.9rem;
-  transition: background 0.2s ease, transform 0.2s ease;
-  margin-left: 1rem;
-
-  &:hover {
-    background-color: lighten($primary-light, 5%);
-    transform: translateY(-1px);
-  }
-
-  &:active {
-    transform: translateY(0);
-  }
-}
-
-// Remove underline from previous nav-link styles
-.navbar .nav-link {
-  text-decoration: none;
-  color: inherit;
-  margin: 0 0.5rem;
-
-  &:hover::after {
-    width: 0; // remove underline animation
-  }
-}
-

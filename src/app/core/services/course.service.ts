@@ -1,37 +1,43 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators'; 
-import { Course } from '../models/course.model';
-import { environment } from 'src/environments/environment';
+import { ApiService } from './api.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+export interface Course {
+  id: string;
+  title: string;
+  description?: string;
+  teacherName?: string;
+  isPublished?: boolean;
+  lessons?: { id: string; title: string; order: number }[];
+  // добави/изравни с твоя модел при нужда
+}
+
+@Injectable({ providedIn: 'root' })
 export class CourseService {
-  private apiUrl = `${environment .apiUrl}/courses`;
+  constructor(private api: ApiService) {}
 
-  constructor(private http: HttpClient) {}
-
-  getAllCourses(): Observable<Course[]> {
-    return this.http.get<any>(this.apiUrl).pipe(
-      map((res: any) => res.items) // 👈 explicitly type res as any
-    );
+  getAll(): Observable<Course[]> {
+    return this.api.get<Course[]>('/courses');
   }
 
-  getCourseById(id: number): Observable<Course> {
-    return this.http.get<Course>(`${this.apiUrl}/${id}`);
+  getById(id: string): Observable<Course> {
+    return this.api.get<Course>(`/courses/${id}`);
   }
 
-  createCourse(course: Partial<Course>): Observable<Course> {
-    return this.http.post<Course>(this.apiUrl, course);
+  create(course: Partial<Course>): Observable<Course> {
+    return this.api.post<Course>('/courses', course);
   }
 
-  updateCourse(id: number, course: Partial<Course>): Observable<Course> {
-    return this.http.put<Course>(`${this.apiUrl}/${id}`, course);
+  update(id: string, course: Partial<Course>): Observable<Course> {
+    return this.api.put<Course>(`/courses/${id}`, course);
   }
 
-  deleteCourse(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  delete(id: string): Observable<void> {
+    return this.api.delete<void>(`/courses/${id}`);
+  }
+
+  // Ако записването е през отделен енпойнт /enrollments
+  enroll(courseId: string): Observable<void> {
+    return this.api.post<void>('/enrollments', { courseId });
   }
 }

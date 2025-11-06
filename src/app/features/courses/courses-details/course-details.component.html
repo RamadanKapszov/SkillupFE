@@ -1,0 +1,32 @@
+<div *ngIf="loading"><app-loading-spinner></app-loading-spinner></div>
+<div *ngIf="error" class="error">{{ error }}</div>
+
+<div class="course-details" *ngIf="course && !loading">
+  <h2>{{ course.title }}</h2>
+  <p>{{ course.description }}</p>
+  <p class="teacher">Преподавател: {{ course.teacherName }}</p>
+
+  <div *ngIf="progress">
+    <p>
+      Прогрес: {{ progress.percentage | number : "1.0-0" }}% ({{
+        progress.completedLessons
+      }}/{{ progress.totalLessons }})
+    </p>
+    <div class="progress-bar">
+      <div class="bar" [style.width.%]="progress.percentage"></div>
+    </div>
+  </div>
+
+  <h3>Уроци</h3>
+  <div *ngIf="course.lessons?.length; else noLessons">
+    <app-lesson-item
+      *ngFor="let lesson of progress?.lessons"
+      [lesson]="lesson"
+      (completed)="onLessonCompleted($event)"
+    ></app-lesson-item>
+  </div>
+
+  <ng-template #noLessons>
+    <app-empty-state message="Няма уроци в този курс."></app-empty-state>
+  </ng-template>
+</div>

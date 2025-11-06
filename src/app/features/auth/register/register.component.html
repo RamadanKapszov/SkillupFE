@@ -1,81 +1,69 @@
-<div class="register-container">
-  <div class="register-card">
-    <div class="logo-area">
-      <h1 class="brand-title">Skill<span>Up</span></h1>
-    </div>
+<div class="auth-container">
+  <div class="auth-card">
+    <h1>SkillUp</h1>
+    <h2>Създайте акаунт</h2>
 
-    <h2>Create your account</h2>
-    <p class="subtitle">Join us and start learning today</p>
-
-    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-      <!-- USERNAME -->
+    <form [formGroup]="form" (ngSubmit)="submit()">
       <div class="form-group">
-        <label for="username">Username</label>
+        <label for="username">Потребителско име</label>
         <input
           id="username"
           type="text"
           formControlName="username"
-          placeholder="Enter your username"
+          placeholder="Вашите имена"
         />
-        <div class="field-error" *ngIf="isInvalid('username')">
-          <span *ngIf="registerForm.get('username')?.errors?.['required']">
-            Username is required.
-          </span>
-          <span *ngIf="registerForm.get('username')?.errors?.['minlength']">
-            Username must be at least 3 characters.
-          </span>
+        <div
+          class="error"
+          *ngIf="
+            form.controls.username.touched && form.controls.username.invalid
+          "
+        >
+          Потребителското име е задължително.
         </div>
       </div>
 
-      <!-- EMAIL -->
       <div class="form-group">
-        <label for="email">Email</label>
+        <label for="email">Имейл</label>
         <input
           id="email"
           type="email"
           formControlName="email"
-          placeholder="Enter your email"
+          placeholder="user@example.com"
         />
-        <div class="field-error" *ngIf="isInvalid('email')">
-          <span *ngIf="registerForm.get('email')?.errors?.['required']">
-            Email is required.
-          </span>
-          <span *ngIf="registerForm.get('email')?.errors?.['email']">
-            Please enter a valid email address.
-          </span>
+        <div
+          class="error"
+          *ngIf="form.controls.email.touched && form.controls.email.invalid"
+        >
+          Валиден имейл е задължителен.
         </div>
       </div>
 
-      <!-- PASSWORD -->
       <div class="form-group">
-        <label for="password">Password</label>
+        <label for="password">Парола</label>
         <input
           id="password"
           type="password"
           formControlName="password"
-          placeholder="Create a password"
+          placeholder="••••••"
         />
-        <div class="field-error" *ngIf="isInvalid('password')">
-          <span *ngIf="registerForm.get('password')?.errors?.['required']">
-            Password is required.
-          </span>
-          <span *ngIf="registerForm.get('password')?.errors?.['minlength']">
-            Password must be at least 6 characters.
-          </span>
+        <div
+          class="error"
+          *ngIf="
+            form.controls.password.touched && form.controls.password.invalid
+          "
+        >
+          Въведете парола.
         </div>
       </div>
 
-      <div *ngIf="errorMessage" class="error-message">
-        {{ errorMessage }}
-      </div>
-
-      <button type="submit" [disabled]="registerForm.invalid || registerForm.pristine">
-        Sign Up
+      <button type="submit" [disabled]="form.invalid || loading">
+        {{ loading ? "Регистриране..." : "Регистрация" }}
       </button>
-    </form>
 
-    <p class="login-text">
-      Already have an account? <a routerLink="/auth/login">Sign In</a>
-    </p>
+      <p class="register-text">
+        Вече имате акаунт?
+        <a routerLink="/auth/login">Вход</a>
+      </p>
+    </form>
   </div>
 </div>

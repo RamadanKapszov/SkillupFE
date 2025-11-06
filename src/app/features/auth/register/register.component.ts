@@ -1,47 +1,52 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from 'src/app/core/services/auth.service';
+import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { finalize } from 'rxjs';
+import { ToastService } from '../../../shared/services/toast.service';
+import { AuthHttpService } from 'src/app/core/services/auth-http.service';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.scss']
+  styleUrls: ['./register.component.scss'],
 })
 export class RegisterComponent {
-  registerForm: FormGroup;
-  errorMessage: string | null = null;
+  loading = false;
+
+  form = this.fb.nonNullable.group({
+    username: ['', Validators.required],
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', Validators.required],
+  });
 
   constructor(
     private fb: FormBuilder,
-    private authService: AuthService,
-    private router: Router
-  ) {
-    this.registerForm = this.fb.group({
-      username: ['', [Validators.required, Validators.minLength(3)]],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
-    });
-  }
+    private authHttp: AuthHttpService,
+    private router: Router,
+    private toast: ToastService
+  ) {}
 
-  isInvalid(field: string): boolean {
-  const control = this.registerForm.get(field);
-  return !!(control && control.invalid && (control.dirty || control.touched));
-  }
-
-
-  onSubmit() {
-    if (this.registerForm.invalid) {
-      this.registerForm.markAllAsTouched(); // mark inputs as touched for UI feedback
+  submit() {
+    console.log('Формата е:', this.form.value); // 👈 временно, за тест
+    if (this.form.invalid) {
+      console.warn('Формата е невалидна');
       return;
     }
 
-    const { username, email, password } = this.registerForm.value;
-
-    this.authService.register({ username, email, password }).subscribe({
-      next: () => this.router.navigate(['/courses']),
-      error: (err) =>
-        (this.errorMessage = err.error?.message || 'Registration failed')
-    });
+    this.loading = true;
+    this.authHttp
+      .register(this.form.getRawValue())
+      .pipe(finalize(() => (this.loading = false)))
+      .subscribe({
+        next: () => {
+          this.toast.success('Успешна регистрация!');
+          this.router.navigate(['/login']);
+        },
+        error: (err) => {
+          console.error('Грешка при регистрация', err);
+          const msg = err.error?.message || 'Регистрацията не бе успешна.';
+          this.toast.error(msg);
+        },
+      });
   }
 }

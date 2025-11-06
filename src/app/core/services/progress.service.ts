@@ -1,24 +1,30 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { UserCourseProgress } from '../models/user-course-progress.model';
-import { environment } from 'src/environments/environment';
+import { ApiService } from './api.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+export interface LessonProgressDto {
+  lessonId: string;
+  isCompleted: boolean;
+  completedAt?: string;
+}
+
+export interface UserCourseProgressDto {
+  courseId: string;
+  completedLessons: number;
+  totalLessons: number;
+  percentage: number;
+  lessons: LessonProgressDto[];
+}
+
+@Injectable({ providedIn: 'root' })
 export class ProgressService {
-  private apiUrl = `${environment.apiUrl}/progress`;
+  constructor(private api: ApiService) {}
 
-  constructor(private http: HttpClient) {}
-
-  // Отбелязване на урок като завършен
-  completeLesson(lessonId: number): Observable<any> {
-    return this.http.post(`${this.apiUrl}/lessons/${lessonId}/complete`, {});
+  getCourseProgress(courseId: string): Observable<UserCourseProgressDto> {
+    return this.api.get<UserCourseProgressDto>(`/progress/course/${courseId}`);
   }
 
-  // Връща прогреса на текущия потребител за даден курс
-  getCourseProgress(courseId: number): Observable<UserCourseProgress> {
-    return this.http.get<UserCourseProgress>(`${this.apiUrl}/courses/${courseId}/progress`);
+  completeLesson(lessonId: string): Observable<void> {
+    return this.api.post<void>(`/progress/lessons/${lessonId}/complete`, {});
   }
 }

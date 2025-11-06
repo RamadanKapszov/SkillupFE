@@ -1,15 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { Course } from 'src/app/core/models/course.model';
-import { CourseService } from 'src/app/core/services/course.service';
+import { Course, CourseService } from 'src/app/core/services/course.service';
 
 @Component({
   selector: 'app-courses-list',
   templateUrl: './courses-list.component.html',
-  styleUrls: ['./courses-list.component.scss']
+  styleUrls: ['./courses-list.component.scss'],
 })
 export class CoursesListComponent implements OnInit {
   courses: Course[] = [];
-  loading = true;
+  loading = false;
   error = '';
 
   constructor(private courseService: CourseService) {}
@@ -18,19 +17,18 @@ export class CoursesListComponent implements OnInit {
     this.loadCourses();
   }
 
-  loadCourses(): void {
+  loadCourses() {
     this.loading = true;
-    this.courseService.getAllCourses().subscribe({
-      next: (data) => {
-        console.log('Courses from API:', data);
-        this.courses = data;
+    this.error = '';
+    this.courseService.getAll().subscribe({
+      next: (res) => {
+        this.courses = res;
         this.loading = false;
       },
-      error: (err) => {
-        this.error = 'Грешка при зареждане на курсовете';
-        console.error(err);
+      error: () => {
         this.loading = false;
-      }
+        this.error = 'Грешка при зареждане на курсовете.';
+      },
     });
   }
 }

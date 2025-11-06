@@ -1,46 +1,64 @@
 import { Component } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { finalize } from 'rxjs';
+import { AuthHttpService } from 'src/app/core/services/auth-http.service';
 import { AuthService } from 'src/app/core/services/auth.service';
+import { ToastService } from 'src/app/shared/services/toast.service';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent {
-  loginForm: FormGroup;
-  errorMessage: string | null = null;
+  loading = false;
+
+  // 👇 Here’s where you place it
+  form = this.fb.nonNullable.group({
+    usernameOrEmail: ['', Validators.required],
+    password: ['', Validators.required],
+  });
 
   constructor(
-    private authService: AuthService,
+    private fb: FormBuilder,
+    private authHttp: AuthHttpService,
     private router: Router,
-    private fb: FormBuilder
-  ) {
-    this.loginForm = this.fb.group({
-      usernameOrEmail: ['', Validators.required],
-      password: ['', [Validators.required, Validators.minLength(6)]]
-    });
-  }
+    private toast: ToastService,
+    private authService: AuthService
+  ) {}
 
-  // 👇 Helper to check if a field is invalid and touched
-  isInvalid(field: string): boolean {
-    const control = this.loginForm.get(field);
-    return !!(control && control.invalid && (control.dirty || control.touched));
-  }
+  submit() {
+    if (this.form.invalid) return;
 
-  onSubmit() {
-    if (this.loginForm.invalid) {
-      this.loginForm.markAllAsTouched();
-      return;
-    }
+    this.loading = true;
+    this.authHttp
+      .login(this.form.getRawValue())
+      .pipe(finalize(() => (this.loading = false)))
+      .subscribe({
+        next: (response) => {
+          // ✅ 1. Запази токена
+          this.authService.setToken(response.token);
 
-    const { usernameOrEmail, password } = this.loginForm.value;
-    this.authService.login(usernameOrEmail, password).subscribe({
-      next: () => this.router.navigate(['/courses']),
-      error: err => {
-        this.errorMessage = err.error?.message || 'Login failed. Please try again.';
-      }
-    });
+          // ✅ 2. Изведи съобщение
+          this.toast.success('Успешен вход!');
+
+          // ✅ 3. Вземи ролята на текущия потребител
+          const role = this.authService.userRole;
+
+          // ✅ 4. Навигирай според роля
+          if (role === 'Admin') {
+            this.router.navigate(['/admin']);
+          } else if (role === 'Teacher') {
+            this.router.navigate(['/courses/manage']);
+          } else {
+            this.router.navigate(['/courses']);
+          }
+        },
+        error: (err) => {
+          const msg = err.error?.message || 'Невалидни данни за вход.';
+          this.toast.error(msg);
+        },
+      });
   }
 }

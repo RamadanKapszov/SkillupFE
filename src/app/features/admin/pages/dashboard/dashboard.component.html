@@ -1,0 +1,45 @@
+<div class="admin-dashboard">
+  <h2>Админ Панел</h2>
+
+  <app-loading-spinner *ngIf="loading"></app-loading-spinner>
+  <div *ngIf="error" class="error">{{ error }}</div>
+
+  <div *ngIf="summary && !loading" class="stats-grid">
+    <div class="stat-card">
+      <h3>{{ summary.totalUsers }}</h3>
+      <p>Потребители</p>
+    </div>
+    <div class="stat-card">
+      <h3>{{ summary.totalCourses }}</h3>
+      <p>Курсове</p>
+    </div>
+    <div class="stat-card">
+      <h3>{{ summary.totalLessons }}</h3>
+      <p>Уроци</p>
+    </div>
+  </div>
+
+  <div class="charts" *ngIf="!loading">
+    <div class="chart-card" *ngIf="courseChartData">
+      <h4>Топ Курсове по Записвания</h4>
+      <canvas
+        baseChart
+        [data]="courseChartData"
+        [type]="'bar'"
+        [options]="chartOptions"
+      >
+      </canvas>
+    </div>
+
+    <div class="chart-card" *ngIf="studentChartData">
+      <h4>Топ Студенти по Точки</h4>
+      <canvas
+        baseChart
+        [data]="studentChartData"
+        [type]="'bar'"
+        [options]="chartOptions"
+      >
+      </canvas>
+    </div>
+  </div>
+</div>

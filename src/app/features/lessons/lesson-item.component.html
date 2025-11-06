@@ -1,0 +1,6 @@
+<div class="lesson-item" [class.done]="lesson.isCompleted">
+  <span>{{ lesson.lessonId }}</span>
+  <button (click)="markComplete()" [disabled]="lesson.isCompleted">
+    {{ lesson.isCompleted ? "Завършен" : "Завърши урок" }}
+  </button>
+</div>

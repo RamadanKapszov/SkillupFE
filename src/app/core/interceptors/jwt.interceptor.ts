@@ -1,22 +1,44 @@
-import { Injectable } from '@angular/core';
-import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Injectable, NgZone } from '@angular/core';
+import {
+  HttpErrorResponse,
+  HttpEvent,
+  HttpHandler,
+  HttpInterceptor,
+  HttpRequest,
+} from '@angular/common/http';
+import { Observable, catchError, throwError } from 'rxjs';
 import { AuthService } from '../services/auth.service';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
+  constructor(
+    private auth: AuthService,
+    private router: Router,
+    private zone: NgZone
+  ) {}
 
-  constructor(private authService: AuthService) {}
+  intercept(
+    req: HttpRequest<any>,
+    next: HttpHandler
+  ): Observable<HttpEvent<any>> {
+    const token = this.auth.getToken();
+    const authReq = token
+      ? req.clone({ setHeaders: { Authorization: `Bearer ${token}` } })
+      : req;
 
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const token = this.authService.getToken();
-    if (token) {
-      req = req.clone({
-        setHeaders: {
-          Authorization: `Bearer ${token}`
+    return next.handle(authReq).pipe(
+      catchError((err: HttpErrorResponse) => {
+        // Централизирано обработване на грешки
+        if (err.status === 401) {
+          // Невалиден/изтекъл токен
+          this.auth.logout();
+          // Навигацията през NgZone предотвратява ExpressionChangedAfterItHasBeenCheckedError в редки случаи
+          this.zone.run(() => this.router.navigate(['/auth/login']));
         }
-      });
-    }
-    return next.handle(req);
+        // Можеш да добавиш toast известие тук (ако имаш ToastService)
+        return throwError(() => err);
+      })
+    );
   }
 }
