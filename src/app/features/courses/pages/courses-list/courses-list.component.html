@@ -1,0 +1,48 @@
+<div class="courses-page">
+  <!-- 🏔️ HERO секция -->
+  <section class="hero">
+    <div class="hero-header">
+      <button class="back-btn" (click)="goBack()">⬅ Назад към категории</button>
+    </div>
+
+    <h1 *ngIf="categoryName; else allCourses">
+      Курсове в категория: {{ categoryName }}
+    </h1>
+    <ng-template #allCourses>
+      <h1>Всички курсове</h1>
+    </ng-template>
+    <p>Разгледай наличните курсове и започни да учиш днес!</p>
+  </section>
+
+  <!-- 📘 GRID -->
+  <section class="courses-grid" *ngIf="!loading && courses.length > 0">
+    <div
+      class="course-card"
+      *ngFor="let c of courses"
+      (click)="viewCourse(c.id)"
+    >
+      <div class="image">
+        <img
+          [src]="c.imageUrl || 'assets/images/default-course.jpg'"
+          [alt]="c.title"
+        />
+      </div>
+      <h2>{{ c.title }}</h2>
+      <p>{{ c.description }}</p>
+      <div class="meta">
+        <span>👨‍🏫 {{ c.teacherUsername || "Неизвестен преподавател" }}</span>
+        <span>🏷️ {{ c.categoryName || "Без категория" }}</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⏳ Зареждане -->
+  <div *ngIf="loading" class="loading">
+    <app-loading-spinner></app-loading-spinner>
+  </div>
+
+  <!-- 🚫 Няма курсове -->
+  <div *ngIf="!loading && !courses.length" class="no-courses">
+    <p>❌ Няма налични курсове в тази категория.</p>
+  </div>
+</div>

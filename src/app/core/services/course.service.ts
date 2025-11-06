@@ -1,16 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
-
-export interface Course {
-  id: string;
-  title: string;
-  description?: string;
-  teacherName?: string;
-  isPublished?: boolean;
-  lessons?: { id: string; title: string; order: number }[];
-  // добави/изравни с твоя модел при нужда
-}
+import { Course } from '../models/course.model';
 
 @Injectable({ providedIn: 'root' })
 export class CourseService {

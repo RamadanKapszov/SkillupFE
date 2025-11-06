@@ -52,7 +52,7 @@ export class LoginComponent {
           } else if (role === 'Teacher') {
             this.router.navigate(['/courses/manage']);
           } else {
-            this.router.navigate(['/courses']);
+            this.router.navigate(['/categories']);
           }
         },
         error: (err) => {

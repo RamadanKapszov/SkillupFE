@@ -2,10 +2,12 @@ import { Component, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
-import { CourseDetailsComponent } from './courses-details/course-details.component';
+import { CourseDetailsComponent } from './pages/courses-details/course-details.component';
 import { LessonItemComponent } from '../lessons/lesson-item.component';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { CoursesListComponent } from './courses-list/courses-list.component';
+import { CoursesListComponent } from './pages/courses-list/courses-list.component';
+import { LessonDetailsComponent } from './pages/lesson-details/lesson-details.component';
+import { SafeUrlPipe } from 'src/app/shared/pipes/safe-url.pipe';
 
 const routes: Routes = [
   { path: '', component: CoursesListComponent },
@@ -17,6 +19,8 @@ const routes: Routes = [
     CoursesListComponent,
     CourseDetailsComponent,
     LessonItemComponent,
+    LessonDetailsComponent,
+    SafeUrlPipe,
   ],
   imports: [
     CommonModule,

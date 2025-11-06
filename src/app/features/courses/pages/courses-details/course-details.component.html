@@ -1,0 +1,68 @@
+<div class="course-details-container" *ngIf="!loading && course">
+  <!-- 🖼️ Hero Section -->
+  <div class="course-hero">
+    <img
+      [src]="course.imageUrl || 'assets/images/default-course.jpg'"
+      alt="{{ course.title }}"
+      class="course-hero-bg"
+    />
+    <div class="course-hero-overlay"></div>
+
+    <div class="course-hero-content">
+      <h1 class="course-title">{{ course.title }}</h1>
+      <div class="course-meta">
+        <span class="category" *ngIf="course.categoryName"
+          >🏷️ {{ course.categoryName }}</span
+        >
+        <span class="teacher"
+          >👨‍🏫 {{ course.teacherUsername || "Неизвестен преподавател" }}</span
+        >
+        <span class="created-at"
+          >📅 {{ course.createdAt | date : "dd.MM.yyyy" }}</span
+        >
+      </div>
+      <button class="enroll-btn" (click)="enroll()">🎓 Запиши се</button>
+    </div>
+  </div>
+
+  <!-- 📘 Course Description -->
+  <div class="course-content">
+    <p class="course-description">{{ course.description }}</p>
+
+    <!-- 📚 Lessons Section -->
+    <div class="lessons-section" *ngIf="!lessonsLoading && lessons.length">
+      <h2>📚 Уроци в курса</h2>
+      <div class="lessons-grid">
+        <div
+          class="lesson-card"
+          *ngFor="let l of lessons"
+          (click)="viewLesson(l.id)"
+        >
+          <div class="lesson-header">
+            <div class="lesson-icon">🎥</div>
+            <div class="lesson-info">
+              <h3>{{ l.title }}</h3>
+              <p class="lesson-desc">
+                {{ l.description || "Без описание" }}
+              </p>
+            </div>
+          </div>
+          <div class="lesson-footer">
+            <span class="lesson-number">#{{ l.order }}</span>
+            <button class="view-btn">Прегледай</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ❌ No Lessons -->
+    <div *ngIf="!lessonsLoading && !lessons.length" class="no-lessons">
+      <p>❌ Няма добавени уроци за този курс.</p>
+    </div>
+
+    <!-- ⏳ Loading Spinner -->
+    <div *ngIf="lessonsLoading" class="loading">
+      <app-loading-spinner></app-loading-spinner>
+    </div>
+  </div>
+</div>

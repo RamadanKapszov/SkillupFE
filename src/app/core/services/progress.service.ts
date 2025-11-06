@@ -20,7 +20,9 @@ export interface UserCourseProgressDto {
 export class ProgressService {
   constructor(private api: ApiService) {}
 
-  getCourseProgress(courseId: string): Observable<UserCourseProgressDto> {
+  getCourseProgress(
+    courseId: string | number
+  ): Observable<UserCourseProgressDto> {
     return this.api.get<UserCourseProgressDto>(`/progress/course/${courseId}`);
   }
 

@@ -8,7 +8,10 @@
     <!-- 🔹 Навигационни линкове -->
     <ul class="nav-links" [class.open]="isMenuOpen">
       <li>
-        <a routerLink="/courses" routerLinkActive="active">Курсове</a>
+        <a routerLink="/courses" routerLinkActive="active">Всички курсове</a>
+      </li>
+      <li>
+        <a routerLink="/categories" routerLinkActive="active">Категории</a>
       </li>
       <li *ngIf="auth.userRole === 'Teacher'">
         <a routerLink="/courses/manage" routerLinkActive="active"

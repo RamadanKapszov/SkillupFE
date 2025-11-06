@@ -1,0 +1,26 @@
+<div class="categories-page">
+  <section class="hero">
+    <h1>Избери категория</h1>
+    <p>Разгледай курсовете по интереси и теми</p>
+  </section>
+
+  <section class="categories-grid" *ngIf="!loading && categories.length > 0">
+    <div
+      class="category-card"
+      *ngFor="let cat of categories"
+      (click)="viewCategory(cat.id)"
+    >
+      <div class="icon">📘</div>
+      <h2>{{ cat.name }}</h2>
+      <p>{{ cat.description || "Без описание" }}</p>
+    </div>
+  </section>
+
+  <div *ngIf="loading" class="loading">
+    <app-loading-spinner></app-loading-spinner>
+  </div>
+
+  <div *ngIf="!loading && !categories.length" class="no-categories">
+    <p>❌ Няма налични категории.</p>
+  </div>
+</div>

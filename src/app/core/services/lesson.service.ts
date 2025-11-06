@@ -1,18 +1,26 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Lesson } from '../models/lesson.model';
-import { environment } from 'src/environments/environment';
+import { ApiService } from './api.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+export interface Lesson {
+  id: number;
+  title: string;
+  description?: string;
+  order: number;
+  content?: string;
+  videoUrl?: string;
+  duration?: string;
+  courseId?: number;
+}
+
+@Injectable({ providedIn: 'root' })
 export class LessonService {
-  private apiUrl = `${environment.apiUrl}/lessons`;
+  constructor(private api: ApiService) {}
 
-  constructor(private http: HttpClient) {}
-
-  getLessonsByCourse(courseId: number): Observable<Lesson[]> {
-    return this.http.get<Lesson[]>(`${this.apiUrl}/course/${courseId}`);
+  getByCourse(courseId: number | string): Observable<Lesson[]> {
+    return this.api.get<Lesson[]>(`/lessons/course/${courseId}`);
+  }
+  getById(id: number): Observable<Lesson> {
+    return this.api.get<Lesson>(`/lessons/${id}`);
   }
 }

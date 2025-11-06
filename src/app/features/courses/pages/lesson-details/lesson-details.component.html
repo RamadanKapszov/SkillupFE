@@ -1,0 +1,31 @@
+<div class="lesson-page" *ngIf="lesson; else loadingTpl">
+  <section class="hero">
+    <button class="back-btn" (click)="goBack()">⬅ Назад към курса</button>
+    <h1>{{ lesson.title }}</h1>
+  </section>
+
+  <section class="content">
+    <div *ngIf="lesson.videoUrl" class="video-wrapper">
+      <iframe
+        [src]="lesson.videoUrl | safeUrl"
+        frameborder="0"
+        allowfullscreen
+      ></iframe>
+    </div>
+
+    <div
+      class="lesson-text"
+      [innerHTML]="lesson.content || 'Няма съдържание.'"
+    ></div>
+
+    <div class="actions">
+      <button class="next-btn" (click)="nextLesson()">Следващ урок ➡️</button>
+    </div>
+  </section>
+</div>
+
+<ng-template #loadingTpl>
+  <div class="loading">
+    <app-loading-spinner></app-loading-spinner>
+  </div>
+</ng-template>

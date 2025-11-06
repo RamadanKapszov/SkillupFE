@@ -1,3 +1,5 @@
+import { Lesson } from './lesson.model';
+
 export interface Course {
   id: number;
   title: string;
@@ -5,8 +7,10 @@ export interface Course {
   categoryId: number;
   categoryName?: string;
   teacherId: number;
-  teacherName?: string;
+  teacherUsername?: string;
   lessonsCount?: number;
   createdAt?: string;
   updatedAt?: string;
+  imageUrl?: string;
+  lessons?: Lesson[];
 }
