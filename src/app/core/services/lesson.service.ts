@@ -11,6 +11,7 @@ export interface Lesson {
   videoUrl?: string;
   duration?: string;
   courseId?: number;
+  teacherUsername?: string;
 }
 
 @Injectable({ providedIn: 'root' })

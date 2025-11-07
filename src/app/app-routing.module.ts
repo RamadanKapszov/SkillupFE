@@ -18,6 +18,11 @@ const routes: Routes = [
     loadChildren: () =>
       import('./features/courses/courses.module').then((m) => m.CoursesModule),
   },
+  {
+    path: 'lessons',
+    loadChildren: () =>
+      import('./features/lessons/lessons.module').then((m) => m.LessonsModule),
+  },
 
   {
     path: 'categories',

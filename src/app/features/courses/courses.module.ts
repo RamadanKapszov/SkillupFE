@@ -6,7 +6,6 @@ import { CourseDetailsComponent } from './pages/courses-details/course-details.c
 import { LessonItemComponent } from '../lessons/lesson-item.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { CoursesListComponent } from './pages/courses-list/courses-list.component';
-import { LessonDetailsComponent } from './pages/lesson-details/lesson-details.component';
 import { SafeUrlPipe } from 'src/app/shared/pipes/safe-url.pipe';
 
 const routes: Routes = [
@@ -19,7 +18,6 @@ const routes: Routes = [
     CoursesListComponent,
     CourseDetailsComponent,
     LessonItemComponent,
-    LessonDetailsComponent,
     SafeUrlPipe,
   ],
   imports: [

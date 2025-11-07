@@ -1,0 +1,50 @@
+<div class="lesson-page" *ngIf="lesson && !loading; else loadingTpl">
+  <div class="lesson-header">
+    <button class="back-btn" (click)="goBack()">← Назад към курса</button>
+    <h2>{{ lesson.title }}</h2>
+  </div>
+
+  <!-- 👩‍🏫 Преподавател -->
+  <div class="teacher-section" *ngIf="lesson.teacherUsername">
+    <div class="teacher-avatar">
+      <img
+        [src]="
+          'https://api.dicebear.com/7.x/initials/svg?seed=' +
+          lesson.teacherUsername
+        "
+        alt="Teacher Avatar"
+      />
+    </div>
+    <p class="teacher-name">{{ lesson.teacherUsername }}</p>
+  </div>
+
+  <!-- 🎬 Видео секция -->
+  <div *ngIf="lesson.contentUrl" class="lesson-video">
+    <iframe
+      [src]="lesson.contentUrl | safeUrl"
+      frameborder="0"
+      allowfullscreen
+    ></iframe>
+  </div>
+
+  <!-- 📘 Съдържание -->
+  <div class="lesson-content">
+    <p *ngIf="!lesson.contentUrl">⚠️ Няма видео за този урок.</p>
+
+    <div class="lesson-text">
+      <p>
+        {{ lesson.description || "Няма налично описание за този урок." }}
+      </p>
+    </div>
+  </div>
+
+  <div class="lesson-footer">
+    <button class="next-btn" (click)="nextLesson()">Следващ урок →</button>
+  </div>
+</div>
+
+<ng-template #loadingTpl>
+  <div class="loading">
+    <app-loading-spinner></app-loading-spinner>
+  </div>
+</ng-template>

@@ -18,7 +18,7 @@ export class LessonDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    const lessonId = Number(this.route.snapshot.paramMap.get('lessonId'));
+    const lessonId = Number(this.route.snapshot.paramMap.get('id'));
     if (lessonId) {
       this.loadLesson(lessonId);
     }

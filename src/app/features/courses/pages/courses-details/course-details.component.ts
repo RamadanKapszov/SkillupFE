@@ -60,6 +60,9 @@ export class CourseDetailsComponent implements OnInit {
   }
 
   viewLesson(lessonId: number) {
-    this.router.navigate(['/courses/lesson', lessonId]);
+    console.log('Navigating to lesson:', lessonId);
+    this.router.navigate(['/lessons', lessonId]).then((success) => {
+      console.log('Navigation result:', success);
+    });
   }
 }
