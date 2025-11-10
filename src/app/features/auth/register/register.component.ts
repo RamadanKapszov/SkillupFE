@@ -3,7 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { finalize } from 'rxjs';
 import { ToastService } from '../../../shared/services/toast.service';
-import { AuthHttpService } from 'src/app/core/services/auth-http.service';
+import { AuthService } from 'src/app/core/services/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -21,29 +21,35 @@ export class RegisterComponent {
 
   constructor(
     private fb: FormBuilder,
-    private authHttp: AuthHttpService,
     private router: Router,
-    private toast: ToastService
+    private toast: ToastService,
+    private authService: AuthService
   ) {}
 
   submit() {
-    console.log('Формата е:', this.form.value); // 👈 временно, за тест
     if (this.form.invalid) {
-      console.warn('Формата е невалидна');
+      this.toast.error('Моля, попълнете всички полета коректно.');
       return;
     }
 
     this.loading = true;
-    this.authHttp
+    this.authService
       .register(this.form.getRawValue())
       .pipe(finalize(() => (this.loading = false)))
       .subscribe({
         next: () => {
-          this.toast.success('Успешна регистрация!');
-          this.router.navigate(['/login']);
+          this.toast.success('✅ Регистрацията е успешна!');
+          const role = this.authService.userRole;
+          if (role === 'Admin') {
+            this.router.navigate(['/admin']);
+          } else if (role === 'Teacher') {
+            this.router.navigate(['/courses/manage']);
+          } else {
+            this.router.navigate(['/categories']);
+          }
         },
         error: (err) => {
-          console.error('Грешка при регистрация', err);
+          console.error('❌ Грешка при регистрация:', err);
           const msg = err.error?.message || 'Регистрацията не бе успешна.';
           this.toast.error(msg);
         },

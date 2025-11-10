@@ -13,6 +13,20 @@ import {
 export class CategoriesListComponent implements OnInit {
   categories: Category[] = [];
   loading = false;
+  categoryIcons: { [key: number]: string } = {
+    1: '💻', // Programming
+    2: '🧮', // Math
+    3: '🔬', // Science
+    4: '🏛️', // History
+    5: '🎨', // Art
+    6: '💼', // Business
+    7: '🗣️', // Languages
+    8: '🎸', // Music
+    9: '🧘‍♀️', // Fitness
+    10: '⏰', // Productivity
+    11: '📊', // Data Science
+    12: '🌐', // Web Development
+  };
 
   constructor(
     private categoryService: CategoryService,

@@ -12,7 +12,25 @@ export interface Category {
 export class CategoryService {
   constructor(private api: ApiService) {}
 
+  // 🟢 Public endpoints
   getAll(): Observable<Category[]> {
     return this.api.get<Category[]>('/categories');
+  }
+
+  getById(id: number): Observable<Category> {
+    return this.api.get<Category>(`/categories/${id}`);
+  }
+
+  // 🟣 Admin endpoints
+  create(category: Partial<Category>): Observable<Category> {
+    return this.api.post<Category>('/categories', category);
+  }
+
+  update(id: number, category: Partial<Category>): Observable<void> {
+    return this.api.put<void>(`/categories/${id}`, category);
+  }
+
+  delete(id: number): Observable<void> {
+    return this.api.delete<void>(`/categories/${id}`);
   }
 }

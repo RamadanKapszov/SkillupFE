@@ -1,0 +1,71 @@
+<div class="test-page" *ngIf="!submitted; else resultTpl">
+  <div class="test-header">
+    <h2>{{ testTitle }}</h2>
+    <div class="timer">⏱️ {{ formatTime(timeLeft) }}</div>
+  </div>
+  <div class="questions">
+    <div class="question-card" *ngFor="let q of questions; let i = index">
+      <h4>{{ i + 1 }}. {{ q.text }}</h4>
+
+      <!-- 🟢 SINGLE -->
+      <div class="options" *ngIf="q.type === 'single'">
+        <label
+          *ngFor="let opt of q.options"
+          [class.selected]="answers[q.id] === opt"
+        >
+          <input
+            type="radio"
+            name="q{{ q.id }}"
+            [value]="opt"
+            (change)="selectAnswer(q.id, opt)"
+          />
+          {{ opt }}
+        </label>
+      </div>
+
+      <!-- 🔵 MULTIPLE -->
+      <div class="options" *ngIf="q.type === 'multiple'">
+        <label
+          *ngFor="let opt of q.options"
+          [class.selected]="answers[q.id]?.includes(opt)"
+        >
+          <input
+            type="checkbox"
+            [checked]="answers[q.id]?.includes(opt)"
+            (change)="toggleMultiAnswer(q.id, opt, $event)"
+          />
+          {{ opt }}
+        </label>
+      </div>
+
+      <!-- ✏️ TEXT -->
+      <div class="options" *ngIf="q.type === 'text'">
+        <input
+          type="text"
+          placeholder="Въведете отговора си..."
+          [(ngModel)]="answers[q.id]"
+        />
+      </div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="btn gradient" (click)="submitTest()">📩 Предай теста</button>
+  </div>
+</div>
+
+<ng-template #resultTpl>
+  <div class="test-result">
+    <h2>Резултат</h2>
+    <div class="score">
+      🎯 <strong>{{ score }}%</strong>
+    </div>
+    <p *ngIf="score >= 80" class="success">Отлична работа!</p>
+    <p *ngIf="score < 80 && score >= 50" class="good">Добро представяне!</p>
+    <p *ngIf="score < 50" class="fail">Може и по-добре следващия път!</p>
+
+    <button class="btn primary" (click)="goBackToLesson()">
+      ← Назад към урока
+    </button>
+  </div>
+</ng-template>

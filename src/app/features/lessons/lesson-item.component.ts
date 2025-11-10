@@ -8,7 +8,7 @@ import { LessonProgressDto } from 'src/app/core/services/progress.service';
 })
 export class LessonItemComponent {
   @Input() lesson!: LessonProgressDto;
-  @Output() completed = new EventEmitter<string>();
+  @Output() completed = new EventEmitter<number>();
 
   markComplete() {
     if (this.lesson.isCompleted) return;

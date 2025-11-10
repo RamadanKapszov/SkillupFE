@@ -6,10 +6,24 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NavbarComponent } from './core/navbar/navbar.component';
 import { JwtInterceptor } from './core/interceptors/jwt.interceptor'; // adjust path
 import { ToastContainerComponent } from './shared/components/toast-container/toast-container.component';
+import { TestsModule } from './features/tests/tests.module';
+import { HomeComponent } from './features/home/home.component';
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
-  declarations: [AppComponent, NavbarComponent, ToastContainerComponent],
-  imports: [BrowserModule, AppRoutingModule, HttpClientModule],
+  declarations: [
+    AppComponent,
+    NavbarComponent,
+    ToastContainerComponent,
+    HomeComponent,
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    HttpClientModule,
+    TestsModule,
+    SharedModule,
+  ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,

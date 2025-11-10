@@ -1,15 +1,16 @@
-<nav class="navbar">
-  <div class="nav-content">
-    <!-- 🔹 Лого -->
+<nav class="navbar" [class.scrolled]="isScrolled">
+  <div class="nav-inner">
+    <!-- 🟣 Brand -->
     <a routerLink="/" class="brand">
-      <span class="brand-icon">🎓</span> SkillUp
+      <span class="brand-icon">🎓</span>
+      <span class="brand-text">SkillUp</span>
     </a>
 
-    <!-- 🔹 Навигационни линкове -->
+    <!-- 🔹 Desktop Navigation -->
     <ul class="nav-links" [class.open]="isMenuOpen">
-      <li>
-        <a routerLink="/courses" routerLinkActive="active">Всички курсове</a>
-      </li>
+      <li><a routerLink="/home" routerLinkActive="active">Начало</a></li>
+      <li><a routerLink="/about" routerLinkActive="active">За нас</a></li>
+      <li><a routerLink="/courses" routerLinkActive="active">Курсове</a></li>
       <li>
         <a routerLink="/categories" routerLinkActive="active">Категории</a>
       </li>
@@ -23,18 +24,25 @@
       </li>
     </ul>
 
-    <!-- 🔹 Дясна зона -->
+    <!-- 🔹 Right Side -->
     <div class="nav-right">
       <ng-container *ngIf="auth.isLoggedIn(); else guest">
-        <div class="profile" (click)="toggleMenu()">
-          <div class="avatar">
-            {{ auth.currentUser?.fullName?.[0] || "?" }}
+        <div class="profile-wrapper">
+          <div class="profile" (click)="goToProfile()">
+            <div class="avatar">
+              <img
+                *ngIf="auth.currentUser?.avatarUrl"
+                [src]="auth.currentUser?.avatarUrl"
+                alt="Avatar"
+              />
+              <ng-container *ngIf="!auth.currentUser?.avatarUrl">
+                {{ auth.currentUser?.fullName?.[0] || '?' }}
+              </ng-container>
+            </div>
+            <span class="username">{{ auth.currentUser?.fullName }}</span>
           </div>
-          <span class="username">
-            {{ auth.currentUser?.fullName }}
-          </span>
+          <button class="logout-btn" (click)="logout()">Изход</button>
         </div>
-        <button class="logout-btn" (click)="logout()">Изход</button>
       </ng-container>
 
       <ng-template #guest>
@@ -43,9 +51,9 @@
       </ng-template>
     </div>
 
-    <!-- 🔹 Mobile Menu Button -->
+    <!-- 🔹 Mobile Menu Toggle -->
     <button class="menu-btn" (click)="toggleMenu()">
-      <span class="material-icons">menu</span>
+      <i class="fas fa-bars"></i>
     </button>
   </div>
 </nav>

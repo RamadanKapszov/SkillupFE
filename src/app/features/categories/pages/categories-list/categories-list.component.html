@@ -4,17 +4,17 @@
     <p>Разгледай курсовете по интереси и теми</p>
   </section>
 
-  <section class="categories-grid" *ngIf="!loading && categories.length > 0">
+  <div class="categories-grid" *ngIf="!loading && categories.length > 0">
     <div
       class="category-card"
       *ngFor="let cat of categories"
       (click)="viewCategory(cat.id)"
     >
-      <div class="icon">📘</div>
+      <div class="icon">{{ categoryIcons[cat.id] || "📘" }}</div>
       <h2>{{ cat.name }}</h2>
       <p>{{ cat.description || "Без описание" }}</p>
     </div>
-  </section>
+  </div>
 
   <div *ngIf="loading" class="loading">
     <app-loading-spinner></app-loading-spinner>

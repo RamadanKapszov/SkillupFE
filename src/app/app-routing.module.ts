@@ -2,14 +2,23 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './core/guards/auth.guard';
 import { RoleGuard } from './core/guards/role.guard';
+import { TestPageComponent } from './features/tests/test-page/test-page.component';
+import { HomeComponent } from './features/home/home.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'courses', pathMatch: 'full' },
+  { path: '', component: HomeComponent },
 
   {
     path: 'auth',
     loadChildren: () =>
       import('./features/auth/auth.module').then((m) => m.AuthModule),
+  },
+  {
+    path: 'profile',
+    loadComponent: () =>
+      import('./features/profile/profile-page.component').then(
+        (m) => m.ProfilePageComponent
+      ),
   },
 
   {
@@ -23,20 +32,19 @@ const routes: Routes = [
     loadChildren: () =>
       import('./features/lessons/lessons.module').then((m) => m.LessonsModule),
   },
-
+  { path: 'tests/course/:courseId', component: TestPageComponent },
+  {
+    path: 'about',
+    loadChildren: () =>
+      import('./features/about/about.module').then((m) => m.AboutModule),
+  },
   {
     path: 'categories',
+    canActivate: [AuthGuard],
     loadChildren: () =>
       import('./features/categories/categories.module').then(
         (m) => m.CategoriesModule
       ),
-  },
-
-  {
-    path: 'profile',
-    canActivate: [AuthGuard],
-    loadChildren: () =>
-      import('./features/profile/profile.module').then((m) => m.ProfileModule),
   },
 
   // Пример за Admin зона (ако имаш такъв модул):
@@ -48,7 +56,7 @@ const routes: Routes = [
       import('./features/admin/admin.module').then((m) => m.AdminModule),
   },
 
-  { path: '**', redirectTo: 'courses' },
+  { path: '**', redirectTo: '' },
 ];
 
 @NgModule({

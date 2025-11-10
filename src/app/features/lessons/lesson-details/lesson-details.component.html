@@ -1,46 +1,156 @@
-<div class="lesson-page" *ngIf="lesson && !loading; else loadingTpl">
-  <div class="lesson-header">
-    <button class="back-btn" (click)="goBack()">← Назад към курса</button>
-    <h2>{{ lesson.title }}</h2>
-  </div>
+<div class="lesson-layout" *ngIf="lesson && !loading; else loadingTpl">
+  <!-- === 🧭 SIDEBAR === -->
+  <aside class="lesson-sidebar">
+    <h3>📚 Уроци в курса</h3>
 
-  <!-- 👩‍🏫 Преподавател -->
-  <div class="teacher-section" *ngIf="lesson.teacherUsername">
-    <div class="teacher-avatar">
+    <div class="progress-mini" *ngIf="totalLessons > 0">
+      <div class="progress-bar-mini">
+        <div class="progress-fill-mini" [style.width.%]="progressPercent"></div>
+      </div>
+      <p>{{ completedLessons }}/{{ totalLessons }} урока</p>
+    </div>
+
+    <ul class="lesson-list">
+      <li
+        *ngFor="let l of lessons"
+        [class.active]="l.id === lesson.id"
+        (click)="viewLesson(l.id)"
+      >
+        <span>{{ l.orderIndex }}.</span> {{ l.title }}
+      </li>
+    </ul>
+
+    <div class="sidebar-actions">
+      <button class="btn small" (click)="goBack()">⬅️ Към курса</button>
+      <button class="btn small gradient" (click)="nextLesson()">
+        Следващ урок →
+      </button>
+    </div>
+  </aside>
+
+  <!-- === 📖 MAIN CONTENT === -->
+  <main class="lesson-page">
+    <div class="lesson-header">
+      <h2>{{ lesson.title }}</h2>
+    </div>
+
+    <!-- 👩‍🏫 Teacher -->
+    <section class="teacher-card" *ngIf="lesson.teacherUsername">
       <img
         [src]="
           'https://api.dicebear.com/7.x/initials/svg?seed=' +
           lesson.teacherUsername
         "
         alt="Teacher Avatar"
+        class="teacher-avatar"
       />
+      <div>
+        <h3>{{ lesson.teacherUsername }}</h3>
+        <p>Преподавател</p>
+      </div>
+    </section>
+
+    <!-- 🎬 Video -->
+    <div *ngIf="lesson.contentUrl" class="lesson-video">
+      <div class="video-frame">
+        <iframe
+          [src]="lesson.contentUrl | safeUrl"
+          frameborder="0"
+          allowfullscreen
+        ></iframe>
+      </div>
     </div>
-    <p class="teacher-name">{{ lesson.teacherUsername }}</p>
-  </div>
 
-  <!-- 🎬 Видео секция -->
-  <div *ngIf="lesson.contentUrl" class="lesson-video">
-    <iframe
-      [src]="lesson.contentUrl | safeUrl"
-      frameborder="0"
-      allowfullscreen
-    ></iframe>
-  </div>
+    <!-- 📘 Description -->
+    <section class="lesson-content">
+      <h3>📖 Описание</h3>
+      <p>{{ lesson.description || "Няма налично описание." }}</p>
+    </section>
 
-  <!-- 📘 Съдържание -->
-  <div class="lesson-content">
-    <p *ngIf="!lesson.contentUrl">⚠️ Няма видео за този урок.</p>
+    <!-- ✅ Completion -->
+    <section class="lesson-actions" *ngIf="!checkingProgress">
+      <button
+        *ngIf="!completed"
+        class="btn complete-btn"
+        (click)="markCompleted()"
+      >
+        ✅ Маркирай като завършен
+      </button>
+      <div *ngIf="completed" class="completed-tag">🎉 Урокът е завършен!</div>
+    </section>
 
-    <div class="lesson-text">
+    <!-- 🧠 Test -->
+    <section class="test-section" *ngIf="test">
+      <h3>🧩 Тест към урока</h3>
       <p>
-        {{ lesson.description || "Няма налично описание за този урок." }}
+        {{ test.questions.length }} въпроса — макс. {{ test.maxPoints }} точки
       </p>
-    </div>
-  </div>
+      <button class="btn gradient" (click)="startTest()">
+        🚀 Започни теста
+      </button>
+    </section>
 
-  <div class="lesson-footer">
-    <button class="next-btn" (click)="nextLesson()">Следващ урок →</button>
-  </div>
+    <!-- 💬 Reviews -->
+    <section class="reviews-section">
+      <h3>💬 Ревюта</h3>
+      <div *ngIf="reviews.length > 0; else noReviews">
+        <div class="review-item" *ngFor="let r of reviews">
+          <div class="review-header">
+            <strong>{{ r.studentUsername || "Анонимен" }}</strong>
+            <span class="stars">⭐ {{ r.rating }}/5</span>
+          </div>
+          <p class="review-comment">{{ r.comment }}</p>
+          <small class="review-date">{{ r.createdAt | date : "medium" }}</small>
+
+          <div class="review-actions" *ngIf="isMyReview(r)">
+            <button class="btn-outline edit" (click)="editReview(r)">
+              ✏️ Редактирай
+            </button>
+            <button class="btn-outline delete" (click)="deleteReview(r.id)">
+              🗑️ Изтрий
+            </button>
+          </div>
+        </div>
+      </div>
+      <ng-template #noReviews>
+        <p class="no-reviews">😔 Все още няма ревюта. Бъди първият!</p>
+      </ng-template>
+    </section>
+
+    <!-- ✍️ Add/Edit Review -->
+    <section class="add-review" [class.editing]="editingReviewId">
+      <h3 *ngIf="!editingReviewId">📝 Добави ревю</h3>
+      <h3 *ngIf="editingReviewId">✏️ Редактирай ревю</h3>
+
+      <label>⭐ Оценка:</label>
+      <select [(ngModel)]="newReview.rating">
+        <option [ngValue]="0">Изберете...</option>
+        <option *ngFor="let r of [1, 2, 3, 4, 5]" [ngValue]="r">{{ r }}</option>
+      </select>
+
+      <textarea
+        [(ngModel)]="newReview.comment"
+        placeholder="Вашият коментар..."
+      ></textarea>
+
+      <div class="review-buttons">
+        <button
+          class="btn gradient"
+          (click)="submitReview()"
+          [disabled]="submitting"
+        >
+          {{ editingReviewId ? "💾 Запази" : "📩 Изпрати" }}
+        </button>
+        <button
+          *ngIf="editingReviewId"
+          class="btn cancel"
+          (click)="cancelEdit()"
+        >
+          ❌ Отказ
+        </button>
+      </div>
+    </section>
+  </main>
 </div>
 
 <ng-template #loadingTpl>

@@ -1,12 +1,22 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import {
+  AuthHttpService,
+  LoginRequest,
+  RegisterRequest,
+  AuthResponse,
+} from './auth-http.service';
 
 export interface AuthUser {
   id: string;
   email: string;
   fullName: string;
   role: 'Admin' | 'Teacher' | 'Student';
+  totalPoints?: number;
+  avatarUrl?: string;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -16,13 +26,62 @@ export class AuthService {
   private jwt = new JwtHelperService();
   private _currentUser: AuthUser | null = null;
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private authHttp: AuthHttpService) {
     this.tryLoadUserFromStorage();
   }
 
-  // ===========================
+  // ==========================================================
+  // 🔐 AUTH HTTP CALLS
+  // ==========================================================
+
+  login(req: LoginRequest): Observable<AuthResponse> {
+    return this.authHttp.login(req).pipe(
+      tap((res) => {
+        this.setToken(res.token);
+        this.setCurrentUser({
+          id: res.user.id.toString(),
+          email: res.user.email,
+          fullName: res.user.username,
+          role: res.user.role as 'Admin' | 'Teacher' | 'Student',
+          totalPoints: res.user.totalPoints,
+        });
+      })
+    );
+  }
+
+  register(req: RegisterRequest): Observable<AuthResponse> {
+    return this.authHttp.register(req).pipe(
+      tap((res) => {
+        this.setToken(res.token);
+        this.setCurrentUser({
+          id: res.user.id.toString(),
+          email: res.user.email,
+          fullName: res.user.username,
+          role: res.user.role as 'Admin' | 'Teacher' | 'Student',
+          totalPoints: res.user.totalPoints,
+        });
+      })
+    );
+  }
+
+  fetchUserFromApi(): Observable<any> {
+    return this.authHttp.getCurrentUser().pipe(
+      tap((user) => {
+        const newUser: AuthUser = {
+          id: user.id.toString(),
+          email: user.email,
+          fullName: user.username,
+          role: user.role as 'Admin' | 'Teacher' | 'Student',
+          totalPoints: user.totalPoints,
+        };
+        this.setCurrentUser(newUser);
+      })
+    );
+  }
+
+  // ==========================================================
   // 🔑 TOKEN MANAGEMENT
-  // ===========================
+  // ==========================================================
 
   setToken(token: string) {
     localStorage.setItem(this.TOKEN_KEY, token);
@@ -37,9 +96,9 @@ export class AuthService {
     localStorage.removeItem(this.TOKEN_KEY);
   }
 
-  // ===========================
+  // ==========================================================
   // 👤 USER MANAGEMENT
-  // ===========================
+  // ==========================================================
 
   setCurrentUser(user: AuthUser) {
     this._currentUser = user;
@@ -68,9 +127,9 @@ export class AuthService {
     localStorage.removeItem(this.USER_KEY);
   }
 
-  // ===========================
+  // ==========================================================
   // ✅ AUTH STATE
-  // ===========================
+  // ==========================================================
 
   isAuthenticated(): boolean {
     const token = this.getToken();
@@ -92,9 +151,9 @@ export class AuthService {
     this.router.navigate(['/auth/login']);
   }
 
-  // ===========================
+  // ==========================================================
   // 🔍 HELPERS
-  // ===========================
+  // ==========================================================
 
   private tryLoadUserFromStorage() {
     const token = this.getToken();

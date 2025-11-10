@@ -1,122 +1,483 @@
-.lesson-page {
-  max-width: 900px;
-  margin: 60px auto;
-  padding: 20px;
-  background: #ffffff;
-  border-radius: 20px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
-  font-family: "Inter", sans-serif;
-}
-
-.lesson-header {
+.lesson-layout {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  margin-bottom: 10px;
+  gap: 32px;
+  margin: 50px auto;
+  max-width: 1380px;
+  font-family: "Inter", sans-serif;
+  color: #1f2937;
+  align-items: flex-start;
 }
 
-.lesson-header h2 {
-  font-size: 1.6rem;
-  color: #1f2937;
+/* === 🧭 SIDEBAR === */
+.lesson-sidebar {
+  position: sticky;
+  top: 90px;
+  flex: 0 0 300px;
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 28px 24px;
+  height: fit-content;
+  box-shadow: 0 6px 28px rgba(79, 70, 229, 0.08);
+  align-self: flex-start;
+  animation: fadeIn 0.5s ease;
+  border: 1px solid #f3f4f6;
+}
+
+.lesson-sidebar h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #4f46e5;
+  margin-bottom: 18px;
+  text-align: center;
+}
+
+/* Mini progress */
+.progress-mini {
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.progress-bar-mini {
+  height: 10px;
+  background: #e5e7eb;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+
+.progress-fill-mini {
+  height: 100%;
+  background: linear-gradient(90deg, #6366f1, #8b5cf6);
+  transition: width 0.4s ease;
+}
+
+.progress-mini p {
+  font-size: 0.9rem;
+  color: #4b5563;
+  font-weight: 500;
   margin: 0;
 }
 
-.back-btn {
-  background: transparent;
-  border: none;
+/* Lesson List */
+.lesson-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border-top: 1px solid #f3f4f6;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.lesson-list li {
+  padding: 12px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: 0.25s ease;
+  color: #374151;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid #f9fafb;
+}
+
+.lesson-list li span {
+  color: #9ca3af;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.lesson-list li:hover {
+  background: #f3f4f6;
+  color: #4f46e5;
+  transform: translateX(4px);
+}
+
+.lesson-list li.active {
+  background: #eef2ff;
   color: #4f46e5;
   font-weight: 600;
-  font-size: 0.95rem;
-  cursor: pointer;
-  transition: color 0.2s;
+  border-left: 4px solid #6366f1;
+  padding-left: 20px;
 }
 
-.back-btn:hover {
-  color: #312e81;
-}
-
-/* 👩‍🏫 Преподавател */
-.teacher-section {
+/* Sidebar actions */
+.sidebar-actions {
   display: flex;
   flex-direction: column;
+  gap: 10px;
+  margin-top: 26px;
+}
+
+.btn.small {
+  padding: 10px 14px;
+  font-size: 0.9rem;
+  border-radius: 10px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.25s ease;
+  text-align: center;
+}
+
+.btn.small:hover {
+  transform: translateY(-2px);
+  opacity: 0.95;
+}
+
+.btn.small.gradient {
+  background: linear-gradient(90deg, #6366f1, #8b5cf6);
+  color: #fff;
+  box-shadow: 0 3px 10px rgba(99, 102, 241, 0.25);
+}
+
+.btn.small.gradient:hover {
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
+}
+
+.btn.small {
+  background: #f9fafb;
+  color: #1f2937;
+  border: 1px solid #e5e7eb;
+}
+
+/* === MAIN LESSON AREA === */
+.lesson-page {
+  flex: 1;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.05);
+  animation: fadeInUp 0.6s ease;
+  border: 1px solid #f3f4f6;
+}
+
+.lesson-header h2 {
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 20px;
+  color: #111827;
+}
+
+/* === TEACHER CARD === */
+.teacher-card {
+  display: flex;
   align-items: center;
-  margin: 15px 0 25px;
+  gap: 18px;
+  background: #f9fafb;
+  padding: 18px 24px;
+  border-radius: 14px;
+  box-shadow: 0 4px 16px rgba(79, 70, 229, 0.07);
+  margin-bottom: 28px;
 }
 
 .teacher-avatar {
-  width: 70px;
-  height: 70px;
+  width: 72px;
+  height: 72px;
   border-radius: 50%;
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
+  box-shadow: 0 4px 10px rgba(99, 102, 241, 0.25);
 }
 
-.teacher-avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.teacher-name {
-  margin-top: 8px;
-  font-weight: 600;
+.teacher-card h3 {
+  margin: 0;
   color: #4f46e5;
-  font-size: 1.05rem;
+  font-weight: 700;
+  font-size: 1.1rem;
 }
 
-/* 🎬 Видео */
+/* === VIDEO === */
 .lesson-video {
+  margin-bottom: 30px;
+}
+
+.video-frame {
   position: relative;
-  width: 100%;
   padding-top: 56.25%;
   border-radius: 16px;
   overflow: hidden;
-  margin-bottom: 20px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 30px rgba(79, 70, 229, 0.15);
+  background: linear-gradient(145deg, #eef2ff, #f5f3ff);
+  transition: all 0.3s ease;
 }
 
-.lesson-video iframe {
+.video-frame:hover {
+  transform: scale(1.01);
+  box-shadow: 0 12px 35px rgba(79, 70, 229, 0.2);
+}
+
+.video-frame iframe {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-}
-
-/* 📘 Текст */
-.lesson-content {
-  background: #f9fafb;
-  border-radius: 16px;
-  padding: 20px;
-  text-align: left;
-}
-
-.lesson-text {
-  color: #4b5563;
-  line-height: 1.6;
-  font-size: 1rem;
-}
-
-/* ⏭️ Footer */
-.lesson-footer {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 25px;
-}
-
-.next-btn {
-  background: linear-gradient(135deg, #6366f1, #8b5cf6);
-  color: white;
   border: none;
+}
+
+/* === BUTTONS === */
+.btn.gradient {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
   padding: 10px 22px;
-  border-radius: 12px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: 0.25s;
 }
 
-.next-btn:hover {
+.btn.gradient:hover {
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.3);
   transform: translateY(-2px);
-  box-shadow: 0 6px 14px rgba(99, 102, 241, 0.4);
+}
+
+/* === ANIMATIONS === */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* === 📘 Описание и съдържание === */
+.lesson-content {
+  background: #f9fafb;
+  padding: 24px 28px;
+  border-radius: 14px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  margin-bottom: 32px;
+
+  h3 {
+    color: #4f46e5;
+    font-weight: 700;
+    margin-bottom: 12px;
+    font-size: 1.3rem;
+  }
+
+  p {
+    color: #374151;
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+}
+
+/* === ✅ Completion === */
+.lesson-actions {
+  text-align: center;
+  margin-bottom: 36px;
+
+  .complete-btn {
+    background: #10b981;
+    color: white;
+    font-weight: 600;
+    border: none;
+    border-radius: 10px;
+    padding: 12px 24px;
+    transition: all 0.25s ease;
+    cursor: pointer;
+
+    &:hover {
+      background: #059669;
+      transform: translateY(-2px);
+    }
+  }
+
+  .completed-tag {
+    background: #ecfdf5;
+    color: #059669;
+    padding: 10px 18px;
+    border-radius: 12px;
+    font-weight: 600;
+    display: inline-block;
+  }
+}
+
+/* === 🧠 Test Section === */
+.test-section {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 24px 28px;
+  margin-bottom: 40px;
+  text-align: center;
+  box-shadow: 0 6px 16px rgba(79, 70, 229, 0.05);
+
+  h3 {
+    color: #4f46e5;
+    margin-bottom: 10px;
+    font-weight: 700;
+  }
+
+  p {
+    color: #6b7280;
+    font-size: 0.95rem;
+    margin-bottom: 16px;
+  }
+
+  button {
+    font-size: 1rem;
+  }
+}
+
+/* === 💬 Reviews Section === */
+.reviews-section {
+  background: #f9fafb;
+  border-radius: 16px;
+  padding: 30px 34px;
+  margin-bottom: 40px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.05);
+
+  h3 {
+    color: #4f46e5;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+
+  .review-item {
+    background: #fff;
+    border-radius: 12px;
+    padding: 18px 22px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease;
+
+    &:hover {
+      transform: translateY(-3px);
+    }
+
+    .review-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+
+      strong {
+        color: #111827;
+        font-size: 1rem;
+      }
+
+      .stars {
+        color: #f59e0b;
+        font-weight: 600;
+      }
+    }
+
+    .review-comment {
+      color: #374151;
+      font-size: 0.95rem;
+      margin-bottom: 6px;
+      line-height: 1.5;
+    }
+
+    .review-date {
+      color: #9ca3af;
+      font-size: 0.8rem;
+    }
+
+    .review-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .btn-outline {
+      border: 1px solid #e5e7eb;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+
+      &.edit {
+        color: #2563eb;
+        &:hover {
+          background: #eff6ff;
+        }
+      }
+
+      &.delete {
+        color: #dc2626;
+        &:hover {
+          background: #fef2f2;
+        }
+      }
+    }
+  }
+
+  .no-reviews {
+    color: #6b7280;
+    text-align: center;
+    font-style: italic;
+    margin-top: 10px;
+  }
+}
+
+/* === ✍️ Add/Edit Review === */
+.add-review {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 28px 32px;
+  box-shadow: 0 4px 16px rgba(79, 70, 229, 0.08);
+  transition: 0.3s ease;
+
+  &.editing {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+  }
+
+  h3 {
+    color: #4f46e5;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+
+  label {
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  select,
+  textarea {
+    width: 100%;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 0.95rem;
+    margin-bottom: 14px;
+    font-family: inherit;
+  }
+
+  textarea {
+    min-height: 90px;
+    resize: vertical;
+  }
+
+  .review-buttons {
+    display: flex;
+    gap: 10px;
+
+    .btn.cancel {
+      background: #f3f4f6;
+      color: #374151;
+      border: none;
+      &:hover {
+        background: #e5e7eb;
+      }
+    }
+  }
 }

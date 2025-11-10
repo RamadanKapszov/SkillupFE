@@ -5,9 +5,16 @@ import { LessonDetailsComponent } from './lesson-details/lesson-details.componen
 import { SafeUrlPipe } from 'src/app/shared/pipes/safe-url.pipe';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { LessonsRoutingModule } from './lessons-routing.module';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [LessonDetailsComponent, SafeUrlPipe],
-  imports: [CommonModule, RouterModule, SharedModule, LessonsRoutingModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    SharedModule,
+    LessonsRoutingModule,
+    FormsModule,
+  ],
 })
 export class LessonsModule {}

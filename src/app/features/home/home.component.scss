@@ -1,0 +1,198 @@
+.home-page {
+  font-family: "Inter", sans-serif;
+  color: #111827;
+  background: #f9fafb;
+}
+
+/* 🏔️ Hero Section */
+.hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 80px 10%;
+  background: linear-gradient(120deg, #6366f1, #8b5cf6);
+  color: white;
+}
+
+.hero-text {
+  max-width: 520px;
+}
+
+.hero-text h1 {
+  font-size: 2.8rem;
+  font-weight: 800;
+}
+
+.hero-text span {
+  color: #fde68a;
+}
+
+.hero-text p {
+  margin-top: 15px;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.cta-btn {
+  margin-top: 20px;
+  background: white;
+  color: #4f46e5;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+}
+.cta-btn:hover {
+  background: #4f46e5;
+  color: white;
+}
+
+.hero-img img {
+  width: 420px;
+  max-width: 100%;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* 💡 About Section */
+.about {
+  text-align: center;
+  padding: 80px 10%;
+}
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 25px;
+  margin-top: 40px;
+}
+
+.feature-card {
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  padding: 25px;
+  transition: all 0.3s ease;
+}
+.feature-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 25px rgba(99, 102, 241, 0.2);
+}
+.feature-card .icon {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+/* 👥 Audience Section */
+.audience {
+  padding: 80px 10%;
+  background: #eef2ff;
+  text-align: center;
+}
+
+.audience-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  margin-top: 40px;
+}
+
+.audience-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  padding: 25px;
+  transition: 0.3s;
+}
+.audience-card:hover {
+  transform: translateY(-6px);
+}
+.audience-card .icon {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+/* 🚀 CTA Section */
+.cta-section {
+  padding: 80px 10%;
+  background: linear-gradient(120deg, #4f46e5, #7c3aed);
+  color: white;
+  text-align: center;
+}
+
+.cta-section h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.cta-section p {
+  opacity: 0.9;
+  margin-bottom: 20px;
+}
+/* 🌈 Scroll Reveal Animations */
+.fade-in {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Малко по-забавен ефект за картите */
+.feature-card.fade-in,
+.audience-card.fade-in {
+  transition-delay: 0.2s;
+}
+
+/* Hero появяване */
+.hero.fade-in {
+  transform: translateY(0);
+  opacity: 0;
+  animation: fadeSlideIn 1.2s ease forwards;
+}
+
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 💫 Лека пулсация на бутона */
+.cta-btn {
+  animation: pulse 3s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(99, 102, 241, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(99, 102, 241, 0);
+  }
+}

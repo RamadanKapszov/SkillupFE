@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { AuthService, AuthUser } from './auth.service';
+import { Observable } from 'rxjs';
 
 export interface LoginRequest {
   usernameOrEmail: string;
@@ -15,18 +14,33 @@ export interface RegisterRequest {
   password: string;
 }
 
+export interface AuthResponse {
+  token: string;
+  expiresInSeconds: number;
+  user: {
+    id: number;
+    username: string;
+    email: string;
+    role: string;
+    totalPoints: number;
+  };
+}
+
 @Injectable({ providedIn: 'root' })
 export class AuthHttpService {
+  private baseUrl = `${environment.apiUrl}/auth`;
+
   constructor(private http: HttpClient) {}
 
-  login(body: LoginRequest) {
-    return this.http.post<{ token: string }>(
-      `${environment.apiUrl}/auth/login`,
-      body
-    );
+  login(body: LoginRequest): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.baseUrl}/login`, body);
   }
 
-  register(body: RegisterRequest) {
-    return this.http.post(`${environment.apiUrl}/auth/register`, body);
+  register(body: RegisterRequest): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.baseUrl}/register`, body);
+  }
+
+  getCurrentUser(): Observable<AuthResponse['user']> {
+    return this.http.get<AuthResponse['user']>(`${this.baseUrl}/me`);
   }
 }

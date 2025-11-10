@@ -1,6 +1,6 @@
 <div class="course-details-container" *ngIf="!loading && course">
   <!-- 🖼️ Hero Section -->
-  <div class="course-hero">
+  <section class="course-hero">
     <img
       [src]="course.imageUrl || 'assets/images/default-course.jpg'"
       alt="{{ course.title }}"
@@ -10,59 +10,177 @@
 
     <div class="course-hero-content">
       <h1 class="course-title">{{ course.title }}</h1>
+
       <div class="course-meta">
-        <span class="category" *ngIf="course.categoryName"
+        <span *ngIf="course.categoryName" class="meta-item"
           >🏷️ {{ course.categoryName }}</span
         >
-        <span class="teacher"
+        <span class="meta-item"
           >👨‍🏫 {{ course.teacherUsername || "Неизвестен преподавател" }}</span
         >
-        <span class="created-at"
+        <span class="meta-item"
           >📅 {{ course.createdAt | date : "dd.MM.yyyy" }}</span
         >
       </div>
-      <button class="enroll-btn" (click)="enroll()">🎓 Запиши се</button>
     </div>
-  </div>
+  </section>
 
-  <!-- 📘 Course Description -->
-  <div class="course-content">
-    <p class="course-description">{{ course.description }}</p>
+  <div class="course-main-layout">
+    <!-- 🧾 LEFT COLUMN (Main Content) -->
+    <div class="course-main-content">
+      <!-- 🧠 Overview -->
+      <section class="course-overview fade-in">
+        <h2>🎯 Какво ще научиш</h2>
 
-    <!-- 📚 Lessons Section -->
-    <div class="lessons-section" *ngIf="!lessonsLoading && lessons.length">
-      <h2>📚 Уроци в курса</h2>
-      <div class="lessons-grid">
-        <div
-          class="lesson-card"
-          *ngFor="let l of lessons"
-          (click)="viewLesson(l.id)"
-        >
-          <div class="lesson-header">
-            <div class="lesson-icon">🎥</div>
-            <div class="lesson-info">
-              <h3>{{ l.title }}</h3>
-              <p class="lesson-desc">
-                {{ l.description || "Без описание" }}
-              </p>
+        <ul>
+          <li *ngIf="course.whatYouWillLearn; else defaultLearn">
+            {{ course.whatYouWillLearn }}
+          </li>
+        </ul>
+
+        <ng-template #defaultLearn>
+          <ul>
+            <li>✅ Основи на {{ course.title }}</li>
+            <li>✅ Работа с реални проекти и упражнения</li>
+            <li>✅ Практически примери и демо код</li>
+            <li>✅ Подготовка за интервю и сертификация</li>
+          </ul>
+        </ng-template>
+      </section>
+
+      <!-- 📘 About -->
+      <section class="course-description fade-in">
+        <h2>📘 За курса</h2>
+        <p>{{ course.description }}</p>
+
+        <div *ngIf="course.prerequisites" class="info-block">
+          <h3>🧰 Предварителни знания</h3>
+          <p>{{ course.prerequisites }}</p>
+        </div>
+
+        <div *ngIf="course.whoIsFor" class="info-block">
+          <h3>👤 Подходящ за</h3>
+          <p>{{ course.whoIsFor }}</p>
+        </div>
+      </section>
+
+      <!-- 📈 Progress -->
+      <section
+        class="progress-section fade-in"
+        *ngIf="course?.isEnrolled && totalLessons > 0"
+      >
+        <h3>📈 Твоят напредък</h3>
+        <p class="progress-info">
+          {{ completedLessons }}/{{ totalLessons }} урока ({{
+            progressPercent | number : "1.0-0"
+          }}%)
+        </p>
+
+        <div class="progress-bar">
+          <div class="progress-fill" [style.width.%]="progressPercent"></div>
+        </div>
+
+        <p *ngIf="progressPercent < 100" class="progress-tip">
+          Продължавай напред, за да завършиш курса! 🚀
+        </p>
+        <p *ngIf="progressPercent === 100" class="progress-complete">
+          🎉 Отлична работа! Завърши курса успешно!
+        </p>
+      </section>
+
+      <!-- 📚 Lessons -->
+      <section class="lessons-section fade-in" *ngIf="!lessonsLoading">
+        <h2>📚 Уроци в курса</h2>
+
+        <div class="lessons-grid">
+          <div
+            class="lesson-card"
+            *ngFor="let l of lessons"
+            [class.locked]="!course?.isEnrolled"
+            (click)="course?.isEnrolled && viewLesson(l.id)"
+          >
+            <div class="lesson-header">
+              <div class="lesson-icon">
+                {{ course?.isEnrolled ? "🎥" : "🔒" }}
+              </div>
+              <div class="lesson-info">
+                <h3>{{ l.title }}</h3>
+                <p class="lesson-desc">{{ l.description || "Без описание" }}</p>
+              </div>
+            </div>
+
+            <div class="lesson-footer">
+              <span class="lesson-number">#{{ l.orderIndex }}</span>
+              <button class="view-btn" [disabled]="!course?.isEnrolled">
+                <span *ngIf="course?.isEnrolled">🎬 Прегледай</span>
+                <span *ngIf="!course?.isEnrolled">🔒 Заключен</span>
+              </button>
             </div>
           </div>
-          <div class="lesson-footer">
-            <span class="lesson-number">#{{ l.order }}</span>
-            <button class="view-btn">Прегледай</button>
-          </div>
         </div>
+
+        <div *ngIf="!course?.isEnrolled" class="lessons-locked-hint">
+          <p>
+            🔒 Някои уроци са заключени. Запиши се, за да получиш достъп до тях!
+          </p>
+          <button class="enroll-btn" (click)="enroll()">
+            🎓 Запиши се сега
+          </button>
+        </div>
+      </section>
+    </div>
+
+    <!-- 🎓 RIGHT SIDEBAR -->
+    <aside class="course-sidebar">
+      <div class="sidebar-card">
+        <img
+          [src]="course.imageUrl || 'assets/images/default-course.jpg'"
+          alt="{{ course.title }}"
+          class="sidebar-image"
+        />
+
+        <div class="sidebar-info">
+          <p><strong>🎓 Ниво:</strong> {{ course.level || "Начинаещи" }}</p>
+          <p>
+            <strong>⏱️ Продължителност:</strong>
+            {{ course.duration || "8 часа" }}
+          </p>
+          <p><strong>🌐 Език:</strong> {{ course.language || "Български" }}</p>
+          <p><strong>⭐ Оценка:</strong> {{ course.rating || 4.8 }}/5</p>
+          <p><strong>👥 Студенти:</strong> {{ course.studentsCount || 0 }}</p>
+        </div>
+
+        <button
+          class="enroll-btn full-width"
+          [class.enrolled]="course?.isEnrolled"
+          (click)="toggleEnrollment()"
+        >
+          {{ course?.isEnrolled ? "⬅️ Отпиши се" : "🎓 Запиши се" }}
+        </button>
       </div>
-    </div>
+    </aside>
+  </div>
 
-    <!-- ❌ No Lessons -->
-    <div *ngIf="!lessonsLoading && !lessons.length" class="no-lessons">
-      <p>❌ Няма добавени уроци за този курс.</p>
-    </div>
+  <!-- 🌈 Confirm Unenroll Modal -->
+  <div
+    class="confirm-modal-backdrop"
+    *ngIf="showConfirmModal"
+    (click)="closeConfirmModal()"
+  >
+    <div class="confirm-modal" (click)="$event.stopPropagation()">
+      <div class="confirm-icon">❓</div>
+      <h3>Сигурни ли сте, че искате да се отпишете?</h3>
+      <p>
+        Ще загубите достъп до всички уроци в курса
+        <strong>"{{ course?.title }}"</strong>.
+      </p>
 
-    <!-- ⏳ Loading Spinner -->
-    <div *ngIf="lessonsLoading" class="loading">
-      <app-loading-spinner></app-loading-spinner>
+      <div class="confirm-actions">
+        <button class="cancel-btn" (click)="closeConfirmModal()">Откажи</button>
+        <button class="confirm-btn" (click)="confirmUnenroll()">
+          Да, отпиши ме
+        </button>
+      </div>
     </div>
   </div>
 </div>
