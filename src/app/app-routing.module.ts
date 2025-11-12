@@ -4,6 +4,10 @@ import { AuthGuard } from './core/guards/auth.guard';
 import { RoleGuard } from './core/guards/role.guard';
 import { TestPageComponent } from './features/tests/test-page/test-page.component';
 import { HomeComponent } from './features/home/home.component';
+import { HowItWorksComponent } from './shared/components/footer/how-it-works/how-it-works.component';
+import { ForTeachersComponent } from './shared/components/footer/for-teachers/for-teachers.component';
+import { PrivacyPolicyComponent } from './shared/components/footer/privacy-policy/privacy-policy.component';
+import { TermsOfServiceComponent } from './shared/components/footer/terms-of-service/terms-of-service.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -33,6 +37,11 @@ const routes: Routes = [
       import('./features/lessons/lessons.module').then((m) => m.LessonsModule),
   },
   { path: 'tests/course/:courseId', component: TestPageComponent },
+  { path: 'how-it-works', component: HowItWorksComponent },
+  { path: 'for-teachers', component: ForTeachersComponent },
+  { path: 'privacy-policy', component: PrivacyPolicyComponent },
+  { path: 'terms-of-service', component: TermsOfServiceComponent },
+
   {
     path: 'about',
     loadChildren: () =>

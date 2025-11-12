@@ -9,6 +9,7 @@ import { ToastContainerComponent } from './shared/components/toast-container/toa
 import { TestsModule } from './features/tests/tests.module';
 import { HomeComponent } from './features/home/home.component';
 import { SharedModule } from './shared/shared.module';
+import { FooterComponent } from './shared/components/footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { SharedModule } from './shared/shared.module';
     HttpClientModule,
     TestsModule,
     SharedModule,
+    FooterComponent,
   ],
   providers: [
     {

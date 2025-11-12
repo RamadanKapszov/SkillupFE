@@ -1,58 +1,126 @@
-<div class="profile-container" *ngIf="!loading && !error; else loadingTpl">
-  <div class="profile-header">
-    <img
-      [src]="user?.avatarUrl || '/assets/img/default-avatar.png'"
-      alt="Avatar"
-      class="avatar"
-    />
-    <div>
-      <h2>{{ user?.username }}</h2>
-      <p>{{ user?.email }}</p>
-      <p class="points">🏆 {{ user?.totalPoints }} точки</p>
-    </div>
-  </div>
+<div class="profile-layout" *ngIf="!loading && !error; else loadingTpl">
+  <div class="profile-grid">
+    <!-- === LEFT COLUMN: Dashboard Overview === -->
+    <div class="profile-left">
+      <div class="profile-header">
+        <img
+          [src]="user?.avatarUrl || '/assets/img/default-avatar.png'"
+          alt="Avatar"
+          class="avatar"
+        />
+        <div>
+          <h2>{{ user?.username }}</h2>
+          <p>{{ user?.email }}</p>
+          <p class="points">🏆 {{ user?.totalPoints }} точки</p>
+        </div>
+      </div>
 
-  <div class="progress-card">
-    <h3>📊 Прогрес</h3>
-    <div class="progress-bar">
-      <div class="progress-fill" [style.width.%]="user?.progressPercent"></div>
-    </div>
-    <p>{{ user?.progressPercent }}% завършени уроци</p>
-  </div>
+      <div class="progress-card">
+        <h3>📊 Прогрес</h3>
+        <div class="progress-bar">
+          <div
+            class="progress-fill"
+            [style.width.%]="user?.progressPercent"
+          ></div>
+        </div>
+        <p>{{ user?.progressPercent }}% завършени уроци</p>
+      </div>
 
-  <div class="dashboard-sections">
-    <div class="section">
-      <h3>🧩 Последни тестове</h3>
-      <ul>
-        <li *ngFor="let t of user?.completedTests">
-          <strong>{{ t.title }}</strong> — {{ t.score }} точки
-          <small>{{ t.completedAt | date : "dd.MM.yyyy HH:mm" }}</small>
-        </li>
-      </ul>
-    </div>
+      <div class="dashboard-sections">
+        <div class="section">
+          <h3>🧩 Последни тестове</h3>
+          <ul>
+            <li *ngFor="let t of user?.completedTests">
+              <strong>{{ t.title }}</strong> — {{ t.score }} точки
+              <small>{{ t.completedAt | date : "dd.MM.yyyy HH:mm" }}</small>
+            </li>
+          </ul>
+        </div>
 
-    <div class="section">
-      <h3>🏅 Баджове</h3>
-      <div class="badges">
-        <div class="badge" *ngFor="let b of user?.badges">
-          <img [src]="b.iconUrl" alt="{{ b.name }}" />
-          <span>{{ b.name }}</span>
+        <div class="section">
+          <h3>🏅 Баджове</h3>
+          <div class="badges">
+            <div class="badge" *ngFor="let b of user?.badges">
+              <img [src]="b.iconUrl" alt="{{ b.name }}" />
+              <span>{{ b.name }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="profile-section" *ngIf="enrolledCourses?.length">
+          <h3>📘 Моите курсове</h3>
+          <div class="courses-list">
+            <div
+              class="course-card"
+              *ngFor="let c of enrolledCourses"
+              (click)="openCourse(c.id)"
+            >
+              <img
+                [src]="c.imageUrl || '/assets/img/default-course.jpg'"
+                alt="{{ c.title }}"
+              />
+              <div class="course-info">
+                <h4>{{ c.title }}</h4>
+                <small
+                  >📅 Записан на:
+                  {{ c.enrolledAt | date : "dd.MM.yyyy" }}</small
+                >
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
-    <div class="profile-section" *ngIf="enrolledCourses?.length">
-      <h2>📘 Моите курсове</h2>
-      <div class="courses-list">
-        <div class="course-card" *ngFor="let c of enrolledCourses">
-          <h3>{{ c.title }}</h3>
-          <small>📅 Записан на: {{ c.enrolledAt | date : "dd.MM.yyyy" }}</small>
-        </div>
+    <!-- === RIGHT COLUMN: Settings Panel === -->
+    <div class="profile-settings">
+      <h2>⚙️ Настройки на профила</h2>
+      <form (ngSubmit)="updateProfile()" #settingsForm="ngForm">
+        <label>Потребителско име</label>
+        <input
+          type="text"
+          name="username"
+          [(ngModel)]="editData.username"
+          placeholder="Въведи ново потребителско име"
+        />
+
+        <label>Имейл</label>
+        <input
+          type="email"
+          name="email"
+          [(ngModel)]="editData.email"
+          placeholder="example@email.com"
+        />
+
+        <label>Нова парола</label>
+        <input
+          type="password"
+          name="password"
+          [(ngModel)]="editData.password"
+          placeholder="********"
+        />
+
+        <button class="btn gradient" type="submit">💾 Запази промените</button>
+      </form>
+
+      <div class="divider"></div>
+
+      <div class="avatar-update">
+        <h3>🖼️ Смени снимката</h3>
+        <input
+          id="avatarUpload"
+          type="file"
+          (change)="uploadAvatar($event)"
+          hidden
+        />
+        <label for="avatarUpload" class="upload-btn">Качи нова снимка</label>
       </div>
     </div>
   </div>
 </div>
 
 <ng-template #loadingTpl>
-  <div class="loading">⏳ Зареждане на профила...</div>
+  <div class="loading">
+    <app-loading-spinner></app-loading-spinner>
+  </div>
 </ng-template>

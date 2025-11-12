@@ -1,0 +1,71 @@
+.info-page {
+  max-width: 900px;
+  margin: 60px auto;
+  background: #fff;
+  padding: 40px 50px;
+  border-radius: 20px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+  font-family: "Inter", sans-serif;
+  color: #1f2937;
+
+  h1 {
+    font-size: 2rem;
+    color: #4f46e5;
+    font-weight: 800;
+    margin-bottom: 20px;
+  }
+
+  h2 {
+    color: #374151;
+    font-weight: 700;
+    margin-top: 20px;
+  }
+
+  p,
+  li {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #4b5563;
+  }
+
+  ul {
+    margin-left: 20px;
+  }
+
+  .steps,
+  .benefits {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    margin-top: 20px;
+  }
+
+  .step,
+  .benefit {
+    background: #f9fafb;
+    padding: 20px;
+    border-radius: 14px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(99, 102, 241, 0.05);
+    transition: 0.3s;
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 6px 16px rgba(79, 70, 229, 0.15);
+    }
+
+    .icon,
+    span {
+      font-size: 2rem;
+      color: #8b5cf6;
+      margin-bottom: 8px;
+    }
+  }
+
+  .end-text {
+    text-align: center;
+    margin-top: 30px;
+    font-weight: 500;
+    color: #6b7280;
+  }
+}
