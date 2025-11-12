@@ -1,0 +1,58 @@
+<div class="dashboard-container">
+  <div class="header">
+    <h1>👨‍🏫 Добре дошъл!</h1>
+    <p class="subtitle">Прегледай своите курсове, статистики и представяне.</p>
+  </div>
+
+  <!-- === STATS CARDS === -->
+  <div class="stats-grid">
+    <div class="stat-card gradient-purple">
+      <h3>📘 Курсове</h3>
+      <p class="value">{{ stats.courses }}</p>
+      <span class="desc">Активни курсове</span>
+    </div>
+
+    <div class="stat-card gradient-blue">
+      <h3>🎓 Студенти</h3>
+      <p class="value">{{ stats.students }}</p>
+      <span class="desc">Общо записани</span>
+    </div>
+
+    <div class="stat-card gradient-pink">
+      <h3>⭐ Среден рейтинг</h3>
+      <p class="value">{{ stats.avgRating | number : "1.1-2" }}</p>
+      <span class="desc">На база отзиви</span>
+    </div>
+  </div>
+
+  <!-- === RECENT COURSES === -->
+  <div class="courses-section">
+    <h2>📚 Моите курсове</h2>
+
+    <div class="courses-list" *ngIf="courses.length; else noCoursesTpl">
+      <div class="course-item" *ngFor="let c of courses">
+        <img
+          [src]="c.imageUrl || 'assets/images/default-course.jpg'"
+          alt="{{ c.title }}"
+        />
+        <div class="course-info">
+          <h3>{{ c.title }}</h3>
+          <p class="muted">{{ c.shortDescription || c.description }}</p>
+
+          <div class="meta">
+            <span>👥 {{ c.studentsCount || 0 }}</span>
+            <span>⭐ {{ c.averageRating || 0 | number : "1.1-2" }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #noCoursesTpl>
+      <div class="empty">
+        <img src="assets/images/empty-state.svg" />
+        <p>Все още нямаш създадени курсове.</p>
+        <a routerLink="/teacher/courses" class="btn gradient">➕ Създай курс</a>
+      </div>
+    </ng-template>
+  </div>
+</div>

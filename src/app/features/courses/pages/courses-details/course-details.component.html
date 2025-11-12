@@ -1,5 +1,5 @@
 <div class="course-details-container" *ngIf="!loading && course">
-  <!-- 🖼️ Hero Section -->
+  <!-- 🖼️ Hero -->
   <section class="course-hero">
     <img
       [src]="course.imageUrl || 'assets/images/default-course.jpg'"
@@ -12,30 +12,28 @@
       <h1 class="course-title">{{ course.title }}</h1>
 
       <div class="course-meta">
-        <span *ngIf="course.categoryName" class="meta-item"
-          >🏷️ {{ course.categoryName }}</span
-        >
-        <span class="meta-item"
-          >👨‍🏫 {{ course.teacherUsername || "Неизвестен преподавател" }}</span
-        >
-        <span class="meta-item"
-          >📅 {{ course.createdAt | date : "dd.MM.yyyy" }}</span
-        >
+        <span *ngIf="course.categoryName" class="meta-item">
+          🏷️ {{ course.categoryName }}
+        </span>
+        <span class="meta-item">
+          👨‍🏫 {{ course.teacherUsername || "Неизвестен преподавател" }}
+        </span>
+        <span class="meta-item">
+          📅 {{ course.createdAt | date : "dd.MM.yyyy" }}
+        </span>
       </div>
     </div>
   </section>
 
   <div class="course-main-layout">
-    <!-- 🧾 LEFT COLUMN (Main Content) -->
+    <!-- LEFT -->
     <div class="course-main-content">
-      <!-- 🧠 Overview -->
+      <!-- Overview -->
       <section class="course-overview fade-in">
         <h2>🎯 Какво ще научиш</h2>
 
-        <ul>
-          <li *ngIf="course.whatYouWillLearn; else defaultLearn">
-            {{ course.whatYouWillLearn }}
-          </li>
+        <ul *ngIf="course.whatYouWillLearn; else defaultLearn">
+          <li>{{ course.whatYouWillLearn }}</li>
         </ul>
 
         <ng-template #defaultLearn>
@@ -48,7 +46,7 @@
         </ng-template>
       </section>
 
-      <!-- 📘 About -->
+      <!-- About -->
       <section class="course-description fade-in">
         <h2>📘 За курса</h2>
         <p>{{ course.description }}</p>
@@ -64,7 +62,7 @@
         </div>
       </section>
 
-      <!-- 📈 Progress -->
+      <!-- Progress -->
       <section
         class="progress-section fade-in"
         *ngIf="course?.isEnrolled && totalLessons > 0"
@@ -88,11 +86,20 @@
         </p>
       </section>
 
-      <!-- 📚 Lessons -->
+      <!-- Lessons header (teacher toolbar) -->
       <section class="lessons-section fade-in" *ngIf="!lessonsLoading">
-        <h2>📚 Уроци в курса</h2>
+        <div class="lessons-header">
+          <h2>📚 Уроци в курса</h2>
 
-        <div class="lessons-grid">
+          <div class="teacher-tools" *ngIf="isTeacherOwner">
+            <button class="btn soft" (click)="openAddLesson()">
+              ➕ Добави урок
+            </button>
+          </div>
+        </div>
+
+        <!-- Lessons Grid -->
+        <div class="lessons-grid" *ngIf="lessons?.length; else noLessonsTpl">
           <div
             class="lesson-card"
             *ngFor="let l of lessons"
@@ -103,9 +110,28 @@
               <div class="lesson-icon">
                 {{ course?.isEnrolled ? "🎥" : "🔒" }}
               </div>
+
               <div class="lesson-info">
                 <h3>{{ l.title }}</h3>
                 <p class="lesson-desc">{{ l.description || "Без описание" }}</p>
+              </div>
+
+              <!-- Teacher actions -->
+              <div class="lesson-actions" *ngIf="isTeacherOwner">
+                <button
+                  class="icon-btn edit"
+                  (click)="openEditLesson(l, $event)"
+                  title="Редактирай"
+                >
+                  ✏️
+                </button>
+                <button
+                  class="icon-btn danger"
+                  (click)="deleteLesson(l, $event)"
+                  title="Изтрий"
+                >
+                  🗑️
+                </button>
               </div>
             </div>
 
@@ -119,6 +145,20 @@
           </div>
         </div>
 
+        <ng-template #noLessonsTpl>
+          <div class="no-lessons">
+            <p>❌ Няма добавени уроци.</p>
+            <button
+              *ngIf="isTeacherOwner"
+              class="btn soft"
+              (click)="openAddLesson()"
+            >
+              ➕ Добави първи урок
+            </button>
+          </div>
+        </ng-template>
+
+        <!-- Locked hint -->
         <div *ngIf="!course?.isEnrolled" class="lessons-locked-hint">
           <p>
             🔒 Някои уроци са заключени. Запиши се, за да получиш достъп до тях!
@@ -130,7 +170,7 @@
       </section>
     </div>
 
-    <!-- 🎓 RIGHT SIDEBAR -->
+    <!-- RIGHT sidebar -->
     <aside class="course-sidebar">
       <div class="sidebar-card">
         <img
@@ -161,7 +201,7 @@
     </aside>
   </div>
 
-  <!-- 🌈 Confirm Unenroll Modal -->
+  <!-- Confirm unenroll -->
   <div
     class="confirm-modal-backdrop"
     *ngIf="showConfirmModal"
@@ -174,7 +214,6 @@
         Ще загубите достъп до всички уроци в курса
         <strong>"{{ course?.title }}"</strong>.
       </p>
-
       <div class="confirm-actions">
         <button class="cancel-btn" (click)="closeConfirmModal()">Откажи</button>
         <button class="confirm-btn" (click)="confirmUnenroll()">
@@ -183,4 +222,119 @@
       </div>
     </div>
   </div>
+
+  <!-- ====== Add Lesson Modal (teacher) ====== -->
+  <div class="modal-backdrop" *ngIf="showAddLesson" (click)="closeAddLesson()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <h2>➕ Нов урок</h2>
+      <p class="muted">Попълнете информацията за новия урок.</p>
+
+      <form [formGroup]="addLessonForm" (ngSubmit)="createLesson()">
+        <div class="grid">
+          <label>
+            <span>Заглавие*</span>
+            <input type="text" formControlName="title" required />
+          </label>
+
+          <label>
+            <span>Пореден номер</span>
+            <input type="number" formControlName="orderIndex" />
+          </label>
+        </div>
+
+        <label>
+          <span>Видео URL (YouTube / Vimeo)</span>
+          <input type="url" formControlName="contentUrl" />
+        </label>
+
+        <div class="grid">
+          <label>
+            <span>Продължителност (мин.)</span>
+            <input type="number" formControlName="duration" />
+          </label>
+          <span></span>
+        </div>
+
+        <label>
+          <span>Описание</span>
+          <textarea rows="4" formControlName="description"></textarea>
+        </label>
+
+        <div class="modal-actions">
+          <button type="button" class="btn ghost" (click)="closeAddLesson()">
+            Откажи
+          </button>
+          <button
+            type="submit"
+            class="btn gradient"
+            [disabled]="addLessonForm.invalid || submittingLesson"
+          >
+            {{ submittingLesson ? "Създаване…" : "Създай" }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ====== Edit Lesson Modal (teacher) ====== -->
+  <div
+    class="modal-backdrop"
+    *ngIf="showEditLesson"
+    (click)="closeEditLesson()"
+  >
+    <div class="modal" (click)="$event.stopPropagation()">
+      <h2>✏️ Редакция на урок</h2>
+      <p class="muted">Коригирайте полетата по-долу и запазете.</p>
+
+      <form [formGroup]="editLessonForm" (ngSubmit)="updateLesson()">
+        <div class="grid">
+          <label>
+            <span>Заглавие*</span>
+            <input type="text" formControlName="title" required />
+          </label>
+
+          <label>
+            <span>Пореден номер</span>
+            <input type="number" formControlName="orderIndex" />
+          </label>
+        </div>
+
+        <label>
+          <span>Видео URL</span>
+          <input type="url" formControlName="contentUrl" />
+        </label>
+
+        <div class="grid">
+          <label>
+            <span>Продължителност (мин.)</span>
+            <input type="number" formControlName="duration" />
+          </label>
+          <span></span>
+        </div>
+
+        <label>
+          <span>Описание</span>
+          <textarea rows="4" formControlName="description"></textarea>
+        </label>
+
+        <div class="modal-actions">
+          <button type="button" class="btn ghost" (click)="closeEditLesson()">
+            Откажи
+          </button>
+          <button
+            type="submit"
+            class="btn gradient"
+            [disabled]="editLessonForm.invalid || submittingLesson"
+          >
+            {{ submittingLesson ? "Запазване…" : "Запази" }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Loading -->
+<div *ngIf="loading" class="loading">
+  <app-loading-spinner></app-loading-spinner>
 </div>

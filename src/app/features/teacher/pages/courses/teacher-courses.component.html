@@ -1,0 +1,178 @@
+<div class="page-header">
+  <div class="header-left">
+    <h1>🎓 Моите курсове</h1>
+    <p class="subtitle">
+      Управлявай своите курсове, създавай ново съдържание и вдъхновявай
+      студенти.
+    </p>
+  </div>
+  <button class="btn gradient" (click)="openCreate()">➕ Нов курс</button>
+</div>
+
+<!-- 🔍 Filter/Search -->
+<div class="filters">
+  <div class="search-box">
+    <input
+      type="text"
+      placeholder="🔍 Търси по заглавие..."
+      [(ngModel)]="q"
+      (input)="filter()"
+    />
+  </div>
+</div>
+
+<!-- 🧾 Courses Grid -->
+<div class="courses-grid" *ngIf="filtered.length; else emptyTpl">
+  <div class="course-card" *ngFor="let c of filtered">
+    <div class="thumb">
+      <img
+        [src]="c.imageUrl || 'assets/images/default-course.jpg'"
+        alt="{{ c.title }}"
+      />
+      <div class="overlay">
+        <a [routerLink]="['/courses', c.id]" class="btn overlay-btn"
+          >👁️ Преглед</a
+        >
+      </div>
+    </div>
+
+    <div class="body">
+      <h3>{{ c.title }}</h3>
+      <p class="muted">{{ c.shortDescription || c.description }}</p>
+
+      <div class="meta">
+        <span>👥 {{ c.studentsCount || 0 }} студента</span>
+        <span
+          >⭐ {{ c.averageRating || c.rating || 0 | number : "1.1-2" }}</span
+        >
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn ghost" (click)="edit(c)">✏️ Редактирай</button>
+      <button class="btn danger" (click)="remove(c.id)">🗑️ Изтрий</button>
+    </div>
+  </div>
+</div>
+
+<!-- 🕳 Empty State -->
+<ng-template #emptyTpl>
+  <div class="empty">
+    <img
+      src="assets/images/empty-state.svg"
+      alt="No courses"
+      class="empty-illustration"
+    />
+    <h3>Нямаш създадени курсове все още</h3>
+    <p>Започни своя първи курс днес и сподели знанието си със света!</p>
+    <button class="btn gradient" (click)="openCreate()">➕ Създай курс</button>
+  </div>
+</ng-template>
+
+<!-- ✏️ CREATE / EDIT MODAL -->
+<div
+  class="modal-backdrop"
+  *ngIf="showCreate || showEdit"
+  (click)="showCreate ? closeCreate() : closeEdit()"
+>
+  <div class="modal" (click)="$event.stopPropagation()">
+    <h2>{{ showEdit ? "✏️ Редактирай курс" : "➕ Нов курс" }}</h2>
+    <p class="muted">
+      {{
+        showEdit
+          ? "Промени информацията за курса."
+          : "Попълни информацията по-долу, за да създадеш нов курс."
+      }}
+    </p>
+
+    <form [formGroup]="form" (ngSubmit)="showEdit ? update() : create()">
+      <div class="grid">
+        <label>
+          <span>Заглавие*</span>
+          <input formControlName="title" type="text" required />
+        </label>
+
+        <label>
+          <span>Категория (ID)*</span>
+          <input formControlName="categoryId" type="number" required />
+        </label>
+      </div>
+
+      <label>
+        <span>Кратко описание</span>
+        <input formControlName="shortDescription" type="text" />
+      </label>
+
+      <label>
+        <span>Описание</span>
+        <textarea formControlName="description" rows="4"></textarea>
+      </label>
+
+      <div class="grid">
+        <label>
+          <span>Ниво</span>
+          <input
+            formControlName="level"
+            type="text"
+            placeholder="Beginner / Intermediate / Advanced"
+          />
+        </label>
+
+        <label>
+          <span>Продължителност</span>
+          <input
+            formControlName="duration"
+            type="text"
+            placeholder="8h / 12 lessons"
+          />
+        </label>
+      </div>
+
+      <div class="grid">
+        <label>
+          <span>Език</span>
+          <input formControlName="language" type="text" placeholder="BG / EN" />
+        </label>
+
+        <label>
+          <span>Image URL</span>
+          <input formControlName="imageUrl" type="url" />
+        </label>
+      </div>
+
+      <label>
+        <span>Тагове (запетайки)</span>
+        <input
+          formControlName="tags"
+          type="text"
+          placeholder="c#, dotnet, basics"
+        />
+      </label>
+
+      <div class="modal-actions">
+        <button
+          type="button"
+          class="btn ghost"
+          (click)="showEdit ? closeEdit() : closeCreate()"
+        >
+          Откажи
+        </button>
+        <button
+          type="submit"
+          class="btn gradient"
+          [disabled]="form.invalid || submitting"
+        >
+          {{
+            submitting
+              ? showEdit
+                ? "Запазване…"
+                : "Създаване…"
+              : showEdit
+              ? "💾 Запази"
+              : "Създай"
+          }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { ApiService } from './api.service';
 import { Course } from '../models/course.model';
 import { Lesson } from './lesson.service';
@@ -56,9 +56,15 @@ export class CourseService {
     return this.api.post<void>(`/courses/${courseId}/enroll`, {});
   }
 
-  // 🟢 AUTH: Get courses the current user teaches or is enrolled in
   getMyCourses(): Observable<Course[]> {
-    return this.api.get<Course[]>('/courses/mycourses');
+    // FIX: correct endpoint is /courses/my
+    return this.api.get<Course[]>('/courses/my');
+  }
+  /** ✅ Get only the courses I teach (filter locally to avoid new backend work) */
+  getMyTeachingCourses(currentUserId: number): Observable<Course[]> {
+    return this.getMyCourses().pipe(
+      map((list) => (list || []).filter((c) => c.teacherId === currentUserId))
+    );
   }
 
   // 🟢 AUTH: Get progress for current user in a course

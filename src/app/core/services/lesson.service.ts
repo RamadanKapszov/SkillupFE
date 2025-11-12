@@ -32,6 +32,7 @@ export interface LessonCreateDto {
   contentUrl?: string;
   orderIndex?: number;
   description?: string;
+  duration?: number;
 }
 
 export interface LessonUpdateDto {
@@ -39,6 +40,7 @@ export interface LessonUpdateDto {
   contentUrl?: string;
   orderIndex?: number;
   description?: string;
+  duration?: number;
 }
 
 export interface ReviewCreateDto {

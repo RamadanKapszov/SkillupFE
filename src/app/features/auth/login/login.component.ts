@@ -39,9 +39,9 @@ export class LoginComponent {
           if (role === 'Admin') {
             this.router.navigate(['/admin']);
           } else if (role === 'Teacher') {
-            this.router.navigate(['/courses/manage']);
+            this.router.navigate(['/']);
           } else {
-            this.router.navigate(['/categories']);
+            this.router.navigate(['/']);
           }
         },
         error: (err) => {

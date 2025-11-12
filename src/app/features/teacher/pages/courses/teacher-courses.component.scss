@@ -1,0 +1,414 @@
+/* ===============================
+   TEACHER COURSES PAGE (Premium)
+   =============================== */
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+
+  .header-left {
+    h1 {
+      font-weight: 800;
+      font-size: 1.8rem;
+      margin-bottom: 0.25rem;
+      color: #1e1e2f;
+    }
+    .subtitle {
+      color: #6b7280;
+      font-size: 0.95rem;
+    }
+  }
+
+  .btn.gradient {
+    border: none;
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    cursor: pointer;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    transition: all 0.25s ease;
+    box-shadow: 0 6px 16px rgba(99, 102, 241, 0.3);
+
+    &:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 10px 24px rgba(99, 102, 241, 0.35);
+    }
+  }
+}
+
+.filters {
+  margin-bottom: 20px;
+  .search-box {
+    input {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+      font-size: 0.95rem;
+      transition: 0.25s ease;
+
+      &:focus {
+        border-color: #a5b4fc;
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+      }
+    }
+  }
+}
+
+/* === COURSES GRID === */
+.courses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 22px;
+}
+
+.course-card {
+  display: flex;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.05);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(99, 102, 241, 0.18);
+  }
+
+  .thumb {
+    position: relative;
+    height: 180px;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      opacity: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.3s ease;
+
+      .overlay-btn {
+        background: linear-gradient(135deg, #818cf8, #a78bfa);
+        color: #fff;
+        padding: 8px 14px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+      }
+    }
+
+    &:hover .overlay {
+      opacity: 1;
+    }
+  }
+
+  .body {
+    padding: 16px 18px;
+
+    h3 {
+      font-size: 1.1rem;
+      margin: 0 0 8px;
+      font-weight: 700;
+      color: #1f2937;
+    }
+
+    .muted {
+      color: #6b7280;
+      font-size: 0.92rem;
+      min-height: 44px;
+    }
+
+    .meta {
+      margin-top: 10px;
+      display: flex;
+      justify-content: space-between;
+      color: #6b7280;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+  }
+
+  .actions {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-top: 1px solid #f3f4f6;
+
+    .btn {
+      border: none;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.25s ease;
+
+      &.ghost {
+        background: #eef2ff;
+        color: #4f46e5;
+      }
+
+      &.danger {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+
+      &:hover {
+        transform: translateY(-2px);
+      }
+    }
+  }
+}
+
+/* === EMPTY STATE === */
+.empty {
+  background: #fff;
+  border-radius: 16px;
+  padding: 60px 24px;
+  text-align: center;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.05);
+
+  img {
+    width: 160px;
+    margin-bottom: 20px;
+    opacity: 0.9;
+  }
+
+  h3 {
+    margin: 0 0 10px;
+    font-weight: 700;
+  }
+
+  p {
+    color: #6b7280;
+    margin-bottom: 18px;
+  }
+}
+
+/* === MODAL === */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(17, 24, 39, 0.55);
+  backdrop-filter: blur(3px);
+  display: grid;
+  place-items: center;
+  z-index: 1000;
+}
+
+.modal {
+  width: min(720px, 92vw);
+  background: #fff;
+  border-radius: 18px;
+  padding: 28px 26px 22px;
+  box-shadow: 0 20px 80px rgba(0, 0, 0, 0.25);
+  animation: slideIn 0.25s ease;
+
+  h2 {
+    margin: 0 0 4px;
+    font-weight: 800;
+    color: #1e1e2f;
+  }
+
+  .muted {
+    color: #6b7280;
+    margin-bottom: 12px;
+  }
+
+  form {
+    display: grid;
+    gap: 12px;
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+
+      @media (max-width: 720px) {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    label {
+      display: grid;
+      gap: 6px;
+
+      span {
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: #374151;
+      }
+
+      input,
+      textarea {
+        padding: 10px 12px;
+        border-radius: 10px;
+        border: 1px solid #e5e7eb;
+        transition: 0.25s ease;
+
+        &:focus {
+          border-color: #a5b4fc;
+          box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+        }
+      }
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 10px;
+
+      .btn {
+        border: none;
+        border-radius: 10px;
+        padding: 10px 16px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.25s ease;
+
+        &.ghost {
+          background: #f3f4f6;
+        }
+
+        &.gradient {
+          color: #fff;
+          background: linear-gradient(135deg, #6366f1, #8b5cf6);
+          box-shadow: 0 4px 14px rgba(99, 102, 241, 0.3);
+          &:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 18px rgba(99, 102, 241, 0.4);
+          }
+        }
+      }
+    }
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* =====================================
+   FIXED CONFIRM DIALOG (always visible)
+   ===================================== */
+
+:host ::ng-deep .confirm-overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  background: rgba(17, 24, 39, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3000;
+  backdrop-filter: blur(6px);
+  animation: fadeIn 0.25s ease;
+}
+
+:host ::ng-deep .confirm-modal {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px 26px 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+  width: min(400px, 92vw);
+  text-align: center;
+  animation: scaleIn 0.25s ease;
+
+  h3 {
+    margin: 0 0 10px;
+    font-weight: 700;
+    font-size: 1.2rem;
+  }
+
+  p {
+    color: #4b5563;
+    font-size: 0.95rem;
+    margin-bottom: 18px;
+
+    strong {
+      color: #111827;
+    }
+  }
+
+  .actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+
+    .btn {
+      border: none;
+      border-radius: 10px;
+      padding: 10px 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .btn.ghost {
+      background: #f3f4f6;
+      &:hover {
+        background: #e5e7eb;
+      }
+    }
+
+    .btn.danger {
+      background: #ef4444;
+      color: #fff;
+      &:hover {
+        background: #dc2626;
+      }
+    }
+  }
+}
+
+:host ::ng-deep .confirm-overlay.closing {
+  animation: fadeOut 0.2s ease forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.92);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

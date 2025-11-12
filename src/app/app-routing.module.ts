@@ -8,6 +8,7 @@ import { HowItWorksComponent } from './shared/components/footer/how-it-works/how
 import { ForTeachersComponent } from './shared/components/footer/for-teachers/for-teachers.component';
 import { PrivacyPolicyComponent } from './shared/components/footer/privacy-policy/privacy-policy.component';
 import { TermsOfServiceComponent } from './shared/components/footer/terms-of-service/terms-of-service.component';
+import { TeacherGuard } from './core/guards/teacher.guard';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -54,6 +55,12 @@ const routes: Routes = [
       import('./features/categories/categories.module').then(
         (m) => m.CategoriesModule
       ),
+  },
+  {
+    path: 'teacher',
+    canActivate: [TeacherGuard],
+    loadChildren: () =>
+      import('./features/teacher/teacher.module').then((m) => m.TeacherModule),
   },
 
   // Пример за Admin зона (ако имаш такъв модул):

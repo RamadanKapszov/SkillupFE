@@ -1,0 +1,496 @@
+.course-details-container {
+  font-family: "Inter", system-ui, sans-serif;
+  background: #f9fafb;
+  min-height: 100vh;
+  color: #111827;
+}
+
+/* Hero */
+.course-hero {
+  position: relative;
+  height: 320px;
+  overflow: hidden;
+}
+.course-hero-bg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(60%);
+}
+.course-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    rgba(79, 70, 229, 0.65),
+    rgba(139, 92, 246, 0.55)
+  );
+}
+.course-hero-content {
+  position: absolute;
+  bottom: 40px;
+  left: 60px;
+  color: white;
+  z-index: 2;
+  animation: fadeInUp 0.8s ease forwards;
+}
+.course-title {
+  font-size: 2.6rem;
+  font-weight: 800;
+  margin-bottom: 10px;
+}
+.course-meta {
+  font-size: 1rem;
+  opacity: 0.95;
+}
+.meta-item {
+  margin-right: 18px;
+}
+
+.course-main-layout {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 24px;
+  padding: 30px 5%;
+  align-items: start;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Overview & Description */
+.course-overview,
+.course-description {
+  background: #ffffff;
+  padding: 28px;
+  border-radius: 16px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.05);
+  margin-bottom: 20px;
+}
+.course-overview h2,
+.course-description h2 {
+  margin-top: 0;
+}
+
+.info-block {
+  background: #f9fafb;
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 14px;
+}
+
+/* Progress */
+.progress-section {
+  background: #fff;
+  padding: 25px 30px;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.1);
+  text-align: center;
+  margin-bottom: 20px;
+  animation: fadeInUp 0.8s ease 0.2s forwards;
+}
+.progress-info {
+  color: #4b5563;
+  margin-bottom: 10px;
+}
+.progress-bar {
+  background: #e5e7eb;
+  border-radius: 8px;
+  height: 14px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #6366f1, #8b5cf6);
+  transition: width 0.4s ease;
+}
+.progress-tip {
+  margin-top: 10px;
+  color: #6b7280;
+  font-style: italic;
+}
+.progress-complete {
+  margin-top: 10px;
+  color: #16a34a;
+  font-weight: 700;
+}
+
+/* Lessons */
+.lessons-section {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.05);
+}
+.lessons-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+.teacher-tools .btn.soft {
+  background: #eef2ff;
+  color: #4f46e5;
+  border: none;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.18s ease;
+}
+.teacher-tools .btn.soft:hover {
+  transform: translateY(-2px);
+}
+
+.lessons-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 18px;
+}
+.lesson-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+.lesson-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(79, 70, 229, 0.12);
+}
+.lesson-card.locked {
+  opacity: 0.78;
+  cursor: default;
+}
+.lesson-header {
+  display: grid;
+  grid-template-columns: 52px 1fr auto;
+  gap: 14px;
+  align-items: start;
+}
+.lesson-icon {
+  background: #eef2ff;
+  color: #6366f1;
+  border-radius: 12px;
+  font-size: 1.6rem;
+  padding: 8px;
+  display: grid;
+  place-items: center;
+}
+.lesson-info h3 {
+  margin: 0 0 4px;
+  font-size: 1.1rem;
+}
+.lesson-desc {
+  color: #6b7280;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.lesson-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.icon-btn {
+  border: none;
+  background: #f3f4f6;
+  border-radius: 8px;
+  padding: 6px 8px;
+  cursor: pointer;
+  transition: 0.18s ease;
+}
+.icon-btn:hover {
+  transform: translateY(-2px);
+}
+.icon-btn.edit {
+  color: #2563eb;
+}
+.icon-btn.danger {
+  color: #dc2626;
+}
+
+.lesson-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 14px;
+}
+.lesson-number {
+  color: #9ca3af;
+  font-weight: 600;
+}
+.view-btn {
+  background: #4f46e5;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 0.92rem;
+  transition: 0.18s ease;
+}
+.view-btn:hover {
+  background: #4338ca;
+  transform: translateY(-2px);
+}
+
+.no-lessons {
+  text-align: center;
+  color: #6b7280;
+}
+.no-lessons .btn.soft {
+  margin-top: 8px;
+}
+
+/* Sidebar */
+.course-sidebar .sidebar-card {
+  position: sticky;
+  top: 90px;
+  background: #fff;
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+}
+.sidebar-image {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 12px;
+}
+.sidebar-info p {
+  margin: 6px 0;
+}
+.enroll-btn {
+  background: #10b981;
+  color: #fff;
+  border: none;
+  padding: 12px 16px;
+  border-radius: 12px;
+  margin-top: 12px;
+  cursor: pointer;
+  font-weight: 700;
+  width: 100%;
+  transition: 0.22s ease;
+}
+.enroll-btn:hover {
+  background: #059669;
+  transform: translateY(-2px);
+}
+.enroll-btn.enrolled {
+  background: #ef4444;
+}
+.enroll-btn.enrolled:hover {
+  background: #dc2626;
+}
+
+/* Confirm unenroll */
+.confirm-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(17, 24, 39, 0.55);
+  display: grid;
+  place-items: center;
+  backdrop-filter: blur(6px);
+  z-index: 1000;
+  animation: fadeIn 0.2s ease;
+}
+.confirm-modal {
+  background: linear-gradient(145deg, #ffffff, #f8fafc);
+  border-radius: 20px;
+  padding: 32px 28px;
+  max-width: 420px;
+  width: 92%;
+  text-align: center;
+  box-shadow: 0 12px 40px rgba(79, 70, 229, 0.2);
+  animation: scaleIn 0.2s ease;
+}
+.confirm-icon {
+  font-size: 2.2rem;
+  margin-bottom: 10px;
+}
+.confirm-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 12px;
+}
+.cancel-btn,
+.confirm-btn {
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+}
+.cancel-btn {
+  background: #e5e7eb;
+}
+.confirm-btn {
+  background: linear-gradient(90deg, #ef4444, #f87171);
+  color: #fff;
+}
+
+/* Modals (Add/Edit Lesson) */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(17, 24, 39, 0.55);
+  display: grid;
+  place-items: center;
+  z-index: 1200;
+  backdrop-filter: blur(4px);
+  animation: fadeIn 0.2s ease;
+}
+.modal {
+  width: min(720px, 92vw);
+  background: #fff;
+  border-radius: 18px;
+  padding: 24px 22px 18px;
+  box-shadow: 0 20px 80px rgba(0, 0, 0, 0.25);
+  animation: slideIn 0.22s ease;
+}
+.modal h2 {
+  margin: 0 0 4px;
+  font-weight: 800;
+}
+.modal .muted {
+  color: #6b7280;
+  margin-bottom: 10px;
+}
+.modal form {
+  display: grid;
+  gap: 10px;
+}
+.modal .grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+@media (max-width: 720px) {
+  .modal .grid {
+    grid-template-columns: 1fr;
+  }
+}
+.modal label {
+  display: grid;
+  gap: 6px;
+}
+.modal label span {
+  font-weight: 600;
+  color: #374151;
+}
+.modal input,
+.modal textarea {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  transition: 0.18s ease;
+}
+.modal input:focus,
+.modal textarea:focus {
+  border-color: #a5b4fc;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+.modal .modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 6px;
+}
+.modal .btn {
+  border: none;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.modal .btn.ghost {
+  background: #f3f4f6;
+}
+.modal .btn.gradient {
+  color: #fff;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+}
+
+/* Global confirm overlay (for lesson delete) */
+.confirm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(17, 24, 39, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  backdrop-filter: blur(6px);
+  animation: fadeIn 0.2s ease;
+}
+.confirm-modal h3 {
+  margin: 0 0 8px;
+  font-weight: 800;
+}
+.confirm-modal p {
+  color: #4b5563;
+  margin-bottom: 16px;
+}
+.confirm-modal .actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+.confirm-modal .btn {
+  border: none;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.confirm-modal .btn.ghost {
+  background: #f3f4f6;
+}
+.confirm-modal .btn.danger {
+  background: #ef4444;
+  color: #fff;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes scaleIn {
+  from {
+    transform: scale(0.96);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+@keyframes slideIn {
+  from {
+    transform: translateY(8px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
