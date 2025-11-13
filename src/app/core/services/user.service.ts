@@ -19,27 +19,22 @@ export interface UpdateUserRoleRequest {
 export class UserService {
   constructor(private api: ApiService) {}
 
-  /** Admin: Get all users */
   getAll(): Observable<User[]> {
     return this.api.get<User[]>('/users');
   }
 
-  /** Admin: Get user by ID */
   getById(id: number): Observable<User> {
     return this.api.get<User>(`/users/${id}`);
   }
 
-  /** Admin: Update user role */
   updateRole(id: number, role: UpdateUserRoleRequest): Observable<void> {
     return this.api.put<void>(`/users/${id}/role`, role);
   }
 
-  /** Admin: Delete a user */
   deleteUser(id: number): Observable<void> {
     return this.api.delete<void>(`/users/${id}`);
   }
 
-  /** Student/Teacher/Admin: Get my user info */
   getCurrentUser(): Observable<User> {
     return this.api.get<User>('/auth/me');
   }

@@ -92,18 +92,37 @@
           placeholder="example@email.com"
         />
 
-        <label>Нова парола</label>
-        <input
-          type="password"
-          name="password"
-          [(ngModel)]="editData.password"
-          placeholder="********"
-        />
-
         <button class="btn gradient" type="submit">💾 Запази промените</button>
       </form>
 
       <div class="divider"></div>
+
+      <div class="password-section">
+        <h3>🔐 Смяна на парола</h3>
+
+        <form (ngSubmit)="changePassword()" #pwdForm="ngForm" class="pwd-form">
+          <label>Стара парола</label>
+          <input
+            type="password"
+            name="oldPassword"
+            [(ngModel)]="pwd.old"
+            required
+            placeholder="Текуща парола"
+          />
+
+          <label>Нова парола</label>
+          <input
+            type="password"
+            name="newPassword"
+            [(ngModel)]="pwd.new"
+            required
+            minlength="6"
+            placeholder="Нова парола (мин. 6 символа)"
+          />
+
+          <button class="btn gradient" type="submit">🔄 Смени паролата</button>
+        </form>
+      </div>
 
       <div class="avatar-update">
         <h3>🖼️ Смени снимката</h3>

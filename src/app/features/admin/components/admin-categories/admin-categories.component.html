@@ -1,0 +1,74 @@
+<div class="admin-header">
+  <h1>📚 Категории</h1>
+  <button class="btn primary" (click)="openCreate()">+ Нова категория</button>
+</div>
+
+<div *ngIf="loading" class="loading-box">Зареждане...</div>
+
+<table class="table" *ngIf="!loading && categories.length > 0">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Име</th>
+      <th>Описание</th>
+      <th>Курсове</th>
+      <th class="actions">Действия</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let c of categories">
+      <td>{{ c.id }}</td>
+      <td>{{ c.name }}</td>
+      <td>{{ c.description || "-" }}</td>
+      <td>{{ c.courseCount || 0 }}</td>
+
+      <td class="actions">
+        <button class="btn small edit" (click)="openEdit(c)">✏️</button>
+        <button class="btn small danger" (click)="deleteCategory(c)">🗑️</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div *ngIf="!loading && categories.length === 0" class="empty">
+  Няма налични категории.
+</div>
+
+<!-- CREATE MODAL -->
+<div class="modal-backdrop" *ngIf="showCreateModal">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <h2>Нова категория</h2>
+    <form [formGroup]="createForm">
+      <label>Име</label>
+      <input formControlName="name" />
+
+      <label>Описание</label>
+      <textarea formControlName="description"></textarea>
+
+      <div class="modal-actions">
+        <button class="btn ghost" (click)="closeCreate()">Откажи</button>
+        <button class="btn primary" (click)="createCategory()">Създай</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- EDIT MODAL -->
+<div class="modal-backdrop" *ngIf="showEditModal">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <h2>Редакция</h2>
+    <form [formGroup]="editForm">
+      <label>Име</label>
+      <input formControlName="name" />
+
+      <label>Описание</label>
+      <textarea formControlName="description"></textarea>
+
+      <div class="modal-actions">
+        <button class="btn ghost" (click)="closeEdit()">Откажи</button>
+        <button class="btn primary" (click)="saveEdit()">Запази</button>
+      </div>
+    </form>
+  </div>
+</div>

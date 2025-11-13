@@ -52,32 +52,26 @@ export interface ReviewCreateDto {
 export class LessonService {
   constructor(private api: ApiService) {}
 
-  // 🟢 Get all lessons for a course
   getByCourse(courseId: number | string): Observable<Lesson[]> {
     return this.api.get<Lesson[]>(`/lessons/course/${courseId}`);
   }
 
-  // 🟢 Get single lesson by ID (includes reviews + teacher info)
   getById(id: number): Observable<Lesson> {
     return this.api.get<Lesson>(`/lessons/${id}`);
   }
 
-  // 🟡 Create lesson (Teacher/Admin only)
   create(dto: LessonCreateDto): Observable<Lesson> {
     return this.api.post<Lesson>('/lessons', dto);
   }
 
-  // 🟣 Update lesson (Teacher/Admin only)
   update(id: number, dto: LessonUpdateDto): Observable<void> {
     return this.api.put<void>(`/lessons/${id}`, dto);
   }
 
-  // 🔴 Delete lesson (Teacher/Admin only)
   delete(id: number): Observable<void> {
     return this.api.delete<void>(`/lessons/${id}`);
   }
 
-  // 🟢 Add review to lesson (Student only)
   addReview(
     lessonId: number,
     review: ReviewCreateDto

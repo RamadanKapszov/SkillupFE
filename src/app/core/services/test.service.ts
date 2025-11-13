@@ -6,9 +6,9 @@ export interface TestQuestion {
   id: number;
   text: string;
   type: 'single' | 'multiple' | 'text';
-  options?: string[]; // ✅ direct array (not stringified)
+  options?: string[];
   points?: number;
-  correctAnswer?: string; // (only visible to teachers/admins)
+  correctAnswer?: string;
 }
 
 export interface Test {
@@ -29,12 +29,10 @@ export interface TestResult {
 export class TestService {
   constructor(private api: ApiService) {}
 
-  /** ✅ Get test by its ID (used on /tests/:id page) */
   getById(id: number): Observable<Test> {
     return this.api.get<Test>(`/tests/${id}`);
   }
 
-  /** ✅ Get test attached to a specific lesson */
   getByLesson(lessonId: number): Observable<Test> {
     return this.api.get<Test>(`/tests/lesson/${lessonId}`);
   }
@@ -43,7 +41,6 @@ export class TestService {
     return this.api.get<Test>(`/tests/course/${courseId}`);
   }
 
-  /** ✅ Submit answers and get evaluated result */
   submitTest(
     testId: number,
     answers: Record<number, string>
@@ -51,7 +48,6 @@ export class TestService {
     return this.api.post<TestResult>(`/tests/${testId}/submit`, answers);
   }
 
-  /** 🧾 Optionally — get previous attempt result (if needed later) */
   getUserResult(testId: number): Observable<TestResult> {
     return this.api.get<TestResult>(`/tests/${testId}/result`);
   }

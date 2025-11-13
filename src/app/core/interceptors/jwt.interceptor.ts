@@ -29,14 +29,10 @@ export class JwtInterceptor implements HttpInterceptor {
 
     return next.handle(authReq).pipe(
       catchError((err: HttpErrorResponse) => {
-        // Централизирано обработване на грешки
         if (err.status === 401) {
-          // Невалиден/изтекъл токен
           this.auth.logout();
-          // Навигацията през NgZone предотвратява ExpressionChangedAfterItHasBeenCheckedError в редки случаи
           this.zone.run(() => this.router.navigate(['/auth/login']));
         }
-        // Можеш да добавиш toast известие тук (ако имаш ToastService)
         return throwError(() => err);
       })
     );

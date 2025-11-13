@@ -1,0 +1,158 @@
+<div class="badges-page">
+  <div class="header">
+    <div>
+      <h2>🏅 Управление на баджове</h2>
+      <p>Добавяй, редактирай и изтривай баджове.</p>
+    </div>
+
+    <button class="btn primary" (click)="openCreate()">➕ Нов бадж</button>
+  </div>
+
+  <div class="toolbar">
+    <input type="text" placeholder="🔍 Търси по име..." [(ngModel)]="search" />
+    <span class="count">{{ filteredBadges.length }} баджа</span>
+  </div>
+
+  <div *ngIf="loading" class="loading-block">Зареждане...</div>
+
+  <table class="badges-table" *ngIf="!loading && filteredBadges.length > 0">
+    <thead>
+      <tr>
+        <th>Икона</th>
+        <th>Име</th>
+        <th>Описание</th>
+        <th>Условие</th>
+        <th>Праг</th>
+        <th class="actions">Действия</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let b of filteredBadges">
+        <td>
+          <img *ngIf="b.iconUrl; else noIcon" [src]="b.iconUrl" class="icon" />
+          <ng-template #noIcon>—</ng-template>
+        </td>
+        <td>{{ b.name }}</td>
+        <td>{{ b.description || "-" }}</td>
+        <td>{{ b.conditionType || "-" }}</td>
+        <td>{{ b.threshold ?? "-" }}</td>
+
+        <td class="actions">
+          <button class="btn ghost" (click)="openEdit(b)">✏️</button>
+          <button class="btn danger" (click)="deleteBadge(b)">🗑️</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!loading && filteredBadges.length === 0" class="empty">
+    Няма намерени баджове.
+  </div>
+
+  <!-- CREATE MODAL -->
+  <div class="modal-backdrop" *ngIf="showCreateModal" (click)="closeCreate()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <h3>➕ Нов бадж</h3>
+
+      <form [formGroup]="createForm" (ngSubmit)="createBadge()">
+        <label>
+          <span>Име*</span>
+          <input type="text" formControlName="name" />
+        </label>
+
+        <label>
+          <span>Описание</span>
+          <textarea rows="2" formControlName="description"></textarea>
+        </label>
+
+        <label>
+          <span>Тип условие</span>
+          <select formControlName="conditionType">
+            <option value="">-- избери --</option>
+            <option value="POINTS">Точки</option>
+            <option value="LESSONS_COMPLETED">Завършени уроци</option>
+            <option value="TESTS_COMPLETED">Завършени тестове</option>
+          </select>
+        </label>
+
+        <label>
+          <span>Праг (threshold)</span>
+          <input type="number" formControlName="threshold" />
+        </label>
+
+        <label>
+          <span>Icon URL</span>
+          <input type="text" formControlName="iconUrl" />
+        </label>
+
+        <div class="modal-actions">
+          <button type="button" class="btn ghost" (click)="closeCreate()">
+            Отказ
+          </button>
+
+          <button
+            type="submit"
+            class="btn primary"
+            [disabled]="createForm.invalid || submitting"
+          >
+            {{ submitting ? "Създаване..." : "Създай" }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- EDIT MODAL -->
+  <div class="modal-backdrop" *ngIf="showEditModal" (click)="closeEdit()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <h3>✏️ Редактиране</h3>
+
+      <form [formGroup]="editForm" (ngSubmit)="updateBadge()">
+        <label>
+          <span>Име*</span>
+          <input type="text" formControlName="name" />
+        </label>
+
+        <label>
+          <span>Описание</span>
+          <textarea rows="2" formControlName="description"></textarea>
+        </label>
+
+        <label>
+          <span>Тип условие</span>
+          <select formControlName="conditionType">
+            <option value="">-- избери --</option>
+            <option value="POINTS">Точки</option>
+            <option value="LESSONS_COMPLETED">Завършени уроци</option>
+            <option value="TESTS_COMPLETED">Завършени тестове</option>
+          </select>
+        </label>
+
+        <label>
+          <span>Праг (threshold)</span>
+          <input type="number" formControlName="threshold" />
+        </label>
+
+        <label>
+          <span>Icon URL</span>
+          <input type="text" formControlName="iconUrl" />
+        </label>
+
+        <div class="modal-actions">
+          <button type="button" class="btn ghost" (click)="closeEdit()">
+            Отказ
+          </button>
+
+          <button
+            type="submit"
+            class="btn primary"
+            [disabled]="editForm.invalid || submitting"
+          >
+            {{ submitting ? "Запазване..." : "Запази" }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

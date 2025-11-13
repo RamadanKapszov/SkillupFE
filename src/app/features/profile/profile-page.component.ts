@@ -18,7 +18,7 @@ export class ProfilePageComponent implements OnInit {
   loading = true;
   error = false;
   enrolledCourses: any[] = [];
-  editData = { username: '', email: '', password: '' };
+  editData = { username: '', email: '' };
 
   constructor(
     private profileService: ProfileService,
@@ -46,6 +46,26 @@ export class ProfilePageComponent implements OnInit {
         },
       });
     }
+  }
+
+  pwd = { old: '', new: '' };
+
+  changePassword() {
+    if (!this.pwd.old || !this.pwd.new) {
+      this.toast.warning('Моля, попълнете и двете полета за парола.');
+      return;
+    }
+
+    this.profileService.changePassword(this.pwd.old, this.pwd.new).subscribe({
+      next: () => {
+        this.toast.success('🔐 Паролата е сменена успешно.');
+        this.pwd = { old: '', new: '' };
+      },
+      error: (err) => {
+        const msg = err.error?.error || '❌ Грешка при смяна на паролата.';
+        this.toast.error(msg);
+      },
+    });
   }
 
   updateProfile() {

@@ -1,0 +1,132 @@
+<div class="admin-dashboard" *ngIf="!loading && !error; else loadingTpl">
+  <!-- Summary cards -->
+  <section class="summary-grid">
+    <div class="summary-card primary">
+      <h3>👥 Общо потребители</h3>
+      <p class="value">{{ summary?.totalUsers || 0 }}</p>
+      <p class="hint">
+        Студенти: {{ summary?.totalStudents || 0 }} • Преподаватели:
+        {{ summary?.totalTeachers || 0 }}
+      </p>
+    </div>
+
+    <div class="summary-card">
+      <h3>📚 Курсове</h3>
+      <p class="value">{{ summary?.totalCourses || 0 }}</p>
+      <p class="hint">Общо уроци: {{ summary?.totalLessons || 0 }}</p>
+    </div>
+
+    <div class="summary-card">
+      <h3>🎓 Записвания</h3>
+      <p class="value">{{ summary?.totalEnrollments || 0 }}</p>
+      <p class="hint">
+        Тестове: {{ summary?.totalTests || 0 }} • Баджове:
+        {{ summary?.totalBadges || 0 }}
+      </p>
+    </div>
+  </section>
+
+  <!-- Top lists -->
+  <section class="panels-grid">
+    <!-- Top Courses -->
+    <div class="panel">
+      <div class="panel-header">
+        <h3>🏆 Топ курсове по записвания</h3>
+      </div>
+      <div *ngIf="topCourses.length; else noCourses">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Курс</th>
+              <th>Преподавател</th>
+              <th>Записани</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let c of topCourses; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>
+                <a [routerLink]="['/courses', c.id]">{{ c.title }}</a>
+              </td>
+              <td>{{ c.teacher }}</td>
+              <td>{{ c.enrolledCount }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <ng-template #noCourses>
+        <p class="empty">Няма достатъчно данни за курсове.</p>
+      </ng-template>
+    </div>
+
+    <!-- Top Students -->
+    <div class="panel">
+      <div class="panel-header">
+        <h3>🎖️ Топ студенти по точки</h3>
+      </div>
+      <div *ngIf="topStudents.length; else noStudents">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Потребител</th>
+              <th>Имейл</th>
+              <th>Точки</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let s of topStudents; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ s.username }}</td>
+              <td>{{ s.email }}</td>
+              <td>{{ s.totalPoints }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <ng-template #noStudents>
+        <p class="empty">Няма достатъчно данни за студенти.</p>
+      </ng-template>
+    </div>
+
+    <!-- Top Teachers -->
+    <div class="panel">
+      <div class="panel-header">
+        <h3>👨‍🏫 Топ преподаватели по брой курсове</h3>
+      </div>
+      <div *ngIf="topTeachers.length; else noTeachers">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Преподавател</th>
+              <th>Курсове</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let t of topTeachers; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ t.username }}</td>
+              <td>{{ t.courseCount }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <ng-template #noTeachers>
+        <p class="empty">Няма достатъчно данни за преподаватели.</p>
+      </ng-template>
+    </div>
+  </section>
+</div>
+
+<ng-template #loadingTpl>
+  <div class="loading-wrapper">
+    <div class="spinner"></div>
+    <p>Зареждане на админ таблото...</p>
+  </div>
+
+  <div *ngIf="error" class="error">
+    <p>❌ Възникна грешка при зареждане. Опитайте отново.</p>
+  </div>
+</ng-template>

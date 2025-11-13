@@ -1,0 +1,166 @@
+<div class="page-header">
+  <div>
+    <h1>📚 Courses Management</h1>
+    <p class="subtitle">
+      Преглеждай и управлявай всички курсове в платформата.
+    </p>
+  </div>
+
+  <div class="search-box">
+    <input
+      type="text"
+      placeholder="🔍 Търси по заглавие..."
+      [(ngModel)]="q"
+      (input)="onSearchChange()"
+    />
+  </div>
+</div>
+
+<div class="card" *ngIf="!loading; else loadingTpl">
+  <table class="courses-table" *ngIf="courses.length; else emptyTpl">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Курс</th>
+        <th>Категория</th>
+        <th>Преподавател</th>
+        <th>Студенти</th>
+        <th>Рейтинг</th>
+        <th>Създаден</th>
+        <th class="col-actions"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let c of courses">
+        <td>{{ c.id }}</td>
+        <td>
+          <div class="course-cell">
+            <div class="thumb">
+              <img
+                [src]="c.imageUrl || 'assets/images/default-course.jpg'"
+                alt="{{ c.title }}"
+              />
+            </div>
+            <div>
+              <div class="title">{{ c.title }}</div>
+              <div class="short" *ngIf="c.shortDescription">
+                {{ c.shortDescription }}
+              </div>
+            </div>
+          </div>
+        </td>
+        <td>{{ c.categoryName || "—" }}</td>
+        <td>{{ c.teacherUsername || "—" }}</td>
+        <td>
+          {{ c.studentsCount ?? c.studentsCount === 0 ? c.studentsCount : 0 }}
+        </td>
+        <td>{{ c.averageRating ?? c.rating ?? 0 | number : "1.1-1" }}</td>
+        <td>{{ c.createdAt | date : "dd.MM.yyyy" }}</td>
+        <td class="actions">
+          <button class="btn ghost" (click)="viewCourse(c.id)">
+            👁️ Преглед
+          </button>
+          <button class="btn" (click)="openEdit(c)">✏️ Редактирай</button>
+          <button class="btn danger" (click)="openDelete(c)">🗑️ Изтрий</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Pagination -->
+  <div class="pagination" *ngIf="totalPages() > 1">
+    <button (click)="prevPage()" [disabled]="page === 1">⬅️ Назад</button>
+    <span>Страница {{ page }} от {{ totalPages() }}</span>
+    <button (click)="nextPage()" [disabled]="page === totalPages()">
+      Напред ➡️
+    </button>
+  </div>
+</div>
+
+<ng-template #loadingTpl>
+  <div class="loading">⏳ Зареждане на курсове...</div>
+</ng-template>
+
+<ng-template #emptyTpl>
+  <div class="empty-state">
+    <p>Няма намерени курсове.</p>
+  </div>
+</ng-template>
+
+<!-- ✏️ Edit modal -->
+<div class="modal-backdrop" *ngIf="showEditModal">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <h3>Редакция на курс</h3>
+
+    <label>
+      <span>Заглавие</span>
+      <input [(ngModel)]="selectedCourse.title" />
+    </label>
+
+    <label>
+      <span>Кратко описание</span>
+      <input [(ngModel)]="selectedCourse.shortDescription" />
+    </label>
+
+    <label>
+      <span>Описание</span>
+      <textarea [(ngModel)]="selectedCourse.description" rows="3"></textarea>
+    </label>
+
+    <div class="grid">
+      <label>
+        <span>Ниво</span>
+        <input [(ngModel)]="selectedCourse.level" />
+      </label>
+      <label>
+        <span>Продължителност</span>
+        <input [(ngModel)]="selectedCourse.duration" />
+      </label>
+    </div>
+
+    <div class="grid">
+      <label>
+        <span>Език</span>
+        <input [(ngModel)]="selectedCourse.language" />
+      </label>
+      <label>
+        <span>Категория ID</span>
+        <input type="number" [(ngModel)]="selectedCourse.categoryId" />
+      </label>
+    </div>
+
+    <label>
+      <span>Image URL</span>
+      <input [(ngModel)]="selectedCourse.imageUrl" />
+    </label>
+
+    <label>
+      <span>Тагове</span>
+      <input [(ngModel)]="selectedCourse.tags" />
+    </label>
+
+    <div class="modal-actions">
+      <button class="btn ghost" (click)="showEditModal = false">Откажи</button>
+      <button class="btn primary" (click)="saveEdit()">Запази</button>
+    </div>
+  </div>
+</div>
+
+<!-- 🗑️ Delete modal -->
+<div class="modal-backdrop" *ngIf="showDeleteModal">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <h3>Изтриване на курс</h3>
+    <p>
+      Сигурни ли сте, че искате да изтриете
+      <strong>{{ selectedCourse?.title }}</strong
+      >?
+    </p>
+
+    <div class="modal-actions">
+      <button class="btn ghost" (click)="showDeleteModal = false">
+        Откажи
+      </button>
+      <button class="btn danger" (click)="confirmDelete()">Изтрий</button>
+    </div>
+  </div>
+</div>

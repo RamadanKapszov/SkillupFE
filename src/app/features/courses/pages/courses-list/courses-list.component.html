@@ -1,5 +1,4 @@
 <div class="courses-page">
-  <!-- 🏔️ HERO секция -->
   <section class="hero">
     <div class="hero-header">
       <button class="back-btn" (click)="goBack()">⬅ Назад към категории</button>
@@ -14,7 +13,6 @@
     <p>Разгледай наличните курсове и започни да учиш днес!</p>
   </section>
 
-  <!-- 📘 GRID -->
   <section class="courses-grid" *ngIf="!loading && courses.length > 0">
     <div
       class="course-card"
@@ -36,12 +34,10 @@
     </div>
   </section>
 
-  <!-- ⏳ Зареждане -->
   <div *ngIf="loading" class="loading">
     <app-loading-spinner></app-loading-spinner>
   </div>
 
-  <!-- 🚫 Няма курсове -->
   <div *ngIf="!loading && !courses.length" class="no-courses">
     <p>❌ Няма налични курсове в тази категория.</p>
   </div>

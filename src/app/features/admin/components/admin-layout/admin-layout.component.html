@@ -1,0 +1,65 @@
+<div class="admin-shell">
+  <!-- Sidebar -->
+  <aside class="admin-sidebar" [class.collapsed]="isSidebarCollapsed">
+    <div class="brand" (click)="goHome()">
+      <div class="logo-circle">🎓</div>
+      <div class="brand-text">
+        <span class="title">Админ панел</span>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <a
+        routerLink="dashboard"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        <span class="icon">📊</span>
+        <span class="label">Dashboard</span>
+      </a>
+
+      <a routerLink="users" routerLinkActive="active">
+        <span class="icon">👥</span>
+        <span class="label">Users</span>
+      </a>
+
+      <a routerLink="courses" routerLinkActive="active">
+        <span class="icon">📚</span>
+        <span class="label">Courses</span>
+      </a>
+
+      <a routerLink="categories" routerLinkActive="active">
+        <span class="icon">🗂️</span>
+        <span class="label">Categories</span>
+      </a>
+
+      <a routerLink="lessons" routerLinkActive="active">
+        <span class="icon">🎬</span>
+        <span class="label" *ngIf="!isSidebarCollapsed">Lessons</span>
+      </a>
+
+      <a routerLink="badges" routerLinkActive="active">
+        <span class="icon">🏅</span>
+        <span class="label" *ngIf="!isSidebarCollapsed">Badges</span>
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main content -->
+  <div class="admin-main">
+    <header class="admin-topbar">
+      <div class="left">
+        <h1>Административно табло</h1>
+        <p>Наблюдавай активността и представянето на платформата.</p>
+      </div>
+
+      <div class="right">
+        <div class="pill">👑 Admin</div>
+      </div>
+    </header>
+
+    <main class="admin-content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

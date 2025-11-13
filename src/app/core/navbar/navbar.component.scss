@@ -46,7 +46,6 @@
   }
 }
 
-/* === NAV LINKS === */
 .nav-links {
   display: flex;
   align-items: center;
@@ -85,7 +84,6 @@
     }
   }
 
-  /* MOBILE */
   &.open {
     position: absolute;
     top: 70px;
@@ -103,7 +101,6 @@
   }
 }
 
-/* === NAV RIGHT === */
 .nav-right {
   display: flex;
   align-items: center;
@@ -207,7 +204,6 @@
   }
 }
 
-/* === MENU BUTTON === */
 .menu-btn {
   display: none;
   background: none;
@@ -222,7 +218,6 @@
   }
 }
 
-/* === RESPONSIVE === */
 @media (max-width: 900px) {
   .menu-btn {
     display: block;
@@ -242,7 +237,6 @@
   }
 }
 
-/* === ANIMATIONS === */
 @keyframes fadeInDown {
   from {
     opacity: 0;

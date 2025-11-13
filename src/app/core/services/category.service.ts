@@ -6,13 +6,13 @@ export interface Category {
   id: number;
   name: string;
   description?: string;
+  courseCount?: number;
 }
 
 @Injectable({ providedIn: 'root' })
 export class CategoryService {
   constructor(private api: ApiService) {}
 
-  // 🟢 Public endpoints
   getAll(): Observable<Category[]> {
     return this.api.get<Category[]>('/categories');
   }
@@ -21,7 +21,6 @@ export class CategoryService {
     return this.api.get<Category>(`/categories/${id}`);
   }
 
-  // 🟣 Admin endpoints
   create(category: Partial<Category>): Observable<Category> {
     return this.api.post<Category>('/categories', category);
   }

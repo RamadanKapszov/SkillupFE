@@ -9,6 +9,7 @@ import { ForTeachersComponent } from './shared/components/footer/for-teachers/fo
 import { PrivacyPolicyComponent } from './shared/components/footer/privacy-policy/privacy-policy.component';
 import { TermsOfServiceComponent } from './shared/components/footer/terms-of-service/terms-of-service.component';
 import { TeacherGuard } from './core/guards/teacher.guard';
+import { AdminGuard } from './core/guards/admin.guard';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -66,8 +67,7 @@ const routes: Routes = [
   // Пример за Admin зона (ако имаш такъв модул):
   {
     path: 'admin',
-    canActivate: [AuthGuard, RoleGuard],
-    data: { roles: ['Admin'] },
+    canActivate: [AdminGuard],
     loadChildren: () =>
       import('./features/admin/admin.module').then((m) => m.AdminModule),
   },

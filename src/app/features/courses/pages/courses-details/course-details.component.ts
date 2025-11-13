@@ -218,16 +218,12 @@ export class CourseDetailsComponent implements OnInit {
     });
   }
 
-  /** Navigation */
   viewLesson(lessonId: number) {
     this.router.navigate(['/lessons', lessonId]);
   }
 
-  // ---------- Teacher-only: Lessons CRUD ----------
-
   openAddLesson() {
     this.addLessonForm.reset();
-    // propose next order
     const maxOrder =
       this.lessons.reduce((m, l) => Math.max(m, l.orderIndex ?? 0), 0) || 0;
     this.addLessonForm.patchValue({ orderIndex: maxOrder + 1 });
@@ -249,7 +245,6 @@ export class CourseDetailsComponent implements OnInit {
       contentUrl: v.contentUrl || undefined,
       orderIndex: v.orderIndex ?? undefined,
       description: v.description || undefined,
-      // duration is optional in your API, include if you support it
       ...(v.duration != null ? { duration: v.duration } : {}),
     } as any;
 

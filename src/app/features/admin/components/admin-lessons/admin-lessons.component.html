@@ -1,0 +1,253 @@
+<div class="admin-lessons-page">
+  <!-- ================= LEFT: COURSES ================= -->
+  <aside class="courses-panel">
+    <div class="panel-header">
+      <h2>📚 Курсове</h2>
+      <p>Избери курс, за да управляваш неговите уроци.</p>
+    </div>
+
+    <div class="search-box">
+      <input
+        type="text"
+        placeholder="🔍 Търси курс..."
+        [(ngModel)]="courseSearch"
+        (input)="filterCourses()"
+      />
+    </div>
+
+    <div class="courses-list" *ngIf="!coursesLoading; else loadingCoursesTpl">
+      <div
+        class="course-item"
+        *ngFor="let c of filteredCourses"
+        [class.active]="selectedCourse?.id === c.id"
+        (click)="selectCourse(c)"
+      >
+        <div class="course-title">{{ c.title }}</div>
+        <div class="course-meta">
+          <span>{{ c.level || "Всички нива" }}</span>
+          <span>{{ c.language || "BG" }}</span>
+        </div>
+      </div>
+
+      <div *ngIf="filteredCourses.length === 0" class="empty-state small">
+        Няма курсове по този филтър.
+      </div>
+    </div>
+
+    <ng-template #loadingCoursesTpl>
+      <div class="loading-block">Зареждане на курсовете...</div>
+    </ng-template>
+  </aside>
+
+  <!-- ================= RIGHT: LESSONS ================= -->
+  <section class="lessons-panel">
+    <div class="lessons-header">
+      <div class="left">
+        <h2>
+          📘
+          {{
+            selectedCourse
+              ? "Уроци в: " + selectedCourse.title
+              : "Изберете курс"
+          }}
+        </h2>
+        <p *ngIf="selectedCourse">
+          Управлявай съдържанието за този курс – добавяй, редактирай и изтривай
+          уроци.
+        </p>
+      </div>
+
+      <div class="right">
+        <button
+          class="btn primary"
+          (click)="openCreate()"
+          [disabled]="!selectedCourse"
+        >
+          ➕ Нов урок
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="!selectedCourse" class="empty-state">
+      <p>Изберете курс отляво, за да видите уроците му.</p>
+    </div>
+
+    <ng-container *ngIf="selectedCourse">
+      <div class="lessons-toolbar">
+        <input
+          type="text"
+          placeholder="🔍 Търси урок по заглавие..."
+          [(ngModel)]="lessonSearch"
+        />
+        <span class="count-badge"> {{ filteredLessons.length }} урока </span>
+      </div>
+
+      <!-- Lessons Table / Cards -->
+      <div
+        class="lessons-table-wrapper"
+        *ngIf="!lessonsLoading; else loadingLessonsTpl"
+      >
+        <table class="lessons-table" *ngIf="filteredLessons.length > 0">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Заглавие</th>
+              <th>Ред</th>
+              <th>Продължителност</th>
+              <th>Видео / Линк</th>
+              <th class="actions-col">Действия</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let l of filteredLessons; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td class="title-cell">
+                {{ l.title }}
+                <div class="desc" *ngIf="l.description">
+                  {{ l.description }}
+                </div>
+              </td>
+              <td>{{ l.orderIndex || "-" }}</td>
+              <td>
+                <span *ngIf="l.duration; else noDurationTpl">
+                  {{ l.duration }} мин.
+                </span>
+                <ng-template #noDurationTpl>–</ng-template>
+              </td>
+              <td>
+                <span *ngIf="l.contentUrl; else noLinkTpl">✅ Има видео</span>
+                <ng-template #noLinkTpl>—</ng-template>
+              </td>
+              <td class="actions-col">
+                <button class="btn ghost" (click)="openEdit(l)">
+                  ✏️ Редактирай
+                </button>
+                <button class="btn danger" (click)="deleteLesson(l)">
+                  🗑️ Изтрий
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div *ngIf="filteredLessons.length === 0" class="empty-state">
+          Няма създадени уроци за този курс.
+        </div>
+      </div>
+
+      <ng-template #loadingLessonsTpl>
+        <div class="loading-block">Зареждане на уроците...</div>
+      </ng-template>
+    </ng-container>
+  </section>
+
+  <!-- ============== CREATE MODAL ============== -->
+  <div class="modal-backdrop" *ngIf="showCreateModal" (click)="closeCreate()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <h3>➕ Нов урок</h3>
+      <p class="muted">
+        Създайте нов урок за курса:
+        <strong>{{ selectedCourse?.title }}</strong>
+      </p>
+
+      <form [formGroup]="createForm" (ngSubmit)="createLesson()">
+        <div class="form-grid">
+          <label>
+            <span>Заглавие*</span>
+            <input type="text" formControlName="title" />
+          </label>
+
+          <label>
+            <span>Ред (orderIndex)</span>
+            <input type="number" formControlName="orderIndex" />
+          </label>
+        </div>
+
+        <label>
+          <span>Описание</span>
+          <textarea rows="3" formControlName="description"></textarea>
+        </label>
+
+        <div class="form-grid">
+          <label>
+            <span>Видео / съдържание (URL)</span>
+            <input type="url" formControlName="contentUrl" />
+          </label>
+
+          <label>
+            <span>Продължителност (мин.)</span>
+            <input type="number" formControlName="duration" />
+          </label>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn ghost" (click)="closeCreate()">
+            Отказ
+          </button>
+          <button
+            type="submit"
+            class="btn primary"
+            [disabled]="createForm.invalid || submitting"
+          >
+            {{ submitting ? "Създаване..." : "Създай" }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============== EDIT MODAL ============== -->
+  <div class="modal-backdrop" *ngIf="showEditModal" (click)="closeEdit()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <h3>✏️ Редактиране на урок</h3>
+      <p class="muted">
+        Обновяване на информацията за:
+        <strong>{{ selectedLesson?.title }}</strong>
+      </p>
+
+      <form [formGroup]="editForm" (ngSubmit)="updateLesson()">
+        <div class="form-grid">
+          <label>
+            <span>Заглавие*</span>
+            <input type="text" formControlName="title" />
+          </label>
+
+          <label>
+            <span>Ред (orderIndex)</span>
+            <input type="number" formControlName="orderIndex" />
+          </label>
+        </div>
+
+        <label>
+          <span>Описание</span>
+          <textarea rows="3" formControlName="description"></textarea>
+        </label>
+
+        <div class="form-grid">
+          <label>
+            <span>Видео / съдържание (URL)</span>
+            <input type="url" formControlName="contentUrl" />
+          </label>
+
+          <label>
+            <span>Продължителност (мин.)</span>
+            <input type="number" formControlName="duration" />
+          </label>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn ghost" (click)="closeEdit()">
+            Отказ
+          </button>
+          <button
+            type="submit"
+            class="btn primary"
+            [disabled]="editForm.invalid || submitting"
+          >
+            {{ submitting ? "Запазване..." : "Запази" }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

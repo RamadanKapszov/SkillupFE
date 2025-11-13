@@ -26,7 +26,6 @@ export class NavbarComponent {
     this.router.navigate(['/auth/login']);
   }
 
-  /** 🔹 Навигация към профила */
   goToProfile() {
     this.router.navigate(['/profile']);
   }

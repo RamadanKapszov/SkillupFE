@@ -28,17 +28,14 @@ export interface TopStudent {
 export class DashboardService {
   constructor(private api: ApiService) {}
 
-  /** Get summary counts */
   getSummary(): Observable<DashboardSummary> {
     return this.api.get<DashboardSummary>('/admin-dashboard/summary');
   }
 
-  /** Get top courses by enrollment */
   getTopCourses(top: number = 5): Observable<TopCourse[]> {
     return this.api.get<TopCourse[]>(`/admin-dashboard/top-courses?top=${top}`);
   }
 
-  /** Get top students by points */
   getTopStudents(top: number = 5): Observable<TopStudent[]> {
     return this.api.get<TopStudent[]>(
       `/admin-dashboard/top-students?top=${top}`

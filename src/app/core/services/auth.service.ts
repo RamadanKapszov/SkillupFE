@@ -31,7 +31,7 @@ export class AuthService {
   }
 
   // ==========================================================
-  // 🔐 AUTH HTTP CALLS
+  // AUTH HTTP CALLS
   // ==========================================================
 
   login(req: LoginRequest): Observable<AuthResponse> {
@@ -80,7 +80,7 @@ export class AuthService {
   }
 
   // ==========================================================
-  // 🔑 TOKEN MANAGEMENT
+  // TOKEN MANAGEMENT
   // ==========================================================
 
   setToken(token: string) {
@@ -97,7 +97,7 @@ export class AuthService {
   }
 
   // ==========================================================
-  // 👤 USER MANAGEMENT
+  // USER MANAGEMENT
   // ==========================================================
 
   setCurrentUser(user: AuthUser) {
@@ -128,7 +128,7 @@ export class AuthService {
   }
 
   // ==========================================================
-  // ✅ AUTH STATE
+  // AUTH STATE
   // ==========================================================
 
   isAuthenticated(): boolean {
@@ -152,7 +152,7 @@ export class AuthService {
   }
 
   // ==========================================================
-  // 🔍 HELPERS
+  // HELPERS
   // ==========================================================
 
   private tryLoadUserFromStorage() {

@@ -7,10 +7,6 @@ import { RegisterComponent } from './register/register.component';
 
 @NgModule({
   declarations: [LoginComponent, RegisterComponent],
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    AuthRoutingModule  // тук вече са всички маршрути
-  ],
+  imports: [CommonModule, ReactiveFormsModule, AuthRoutingModule],
 })
 export class AuthModule {}

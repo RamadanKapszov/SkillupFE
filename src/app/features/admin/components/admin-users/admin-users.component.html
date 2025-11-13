@@ -1,0 +1,103 @@
+<div class="page-header">
+  <h1>👥 Users Management</h1>
+
+  <div class="search-box">
+    <input
+      type="text"
+      placeholder="Search users..."
+      [(ngModel)]="q"
+      (input)="filter()"
+    />
+  </div>
+</div>
+
+<table class="users-table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>User</th>
+      <th>Email</th>
+      <th>Role</th>
+      <th>Points</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let u of filtered">
+      <td>{{ u.id }}</td>
+      <td>
+        <strong>{{ u.username }}</strong>
+      </td>
+      <td>{{ u.email }}</td>
+      <td>
+        <span class="role-pill">{{ u.role }}</span>
+      </td>
+      <td>{{ u.totalPoints }}</td>
+      <td class="actions">
+        <button (click)="edit(u)">✏️ Edit</button>
+        <button (click)="changeRole(u)">🔁 Role</button>
+        <button (click)="askDelete(u)" class="danger">🗑️ Delete</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- EDIT MODAL -->
+<div class="modal-backdrop" *ngIf="showEditModal">
+  <div class="modal">
+    <h3>Edit User</h3>
+
+    <label>
+      Username
+      <input [(ngModel)]="selectedUser.username" />
+    </label>
+
+    <label>
+      Email
+      <input [(ngModel)]="selectedUser.email" />
+    </label>
+
+    <div class="modal-actions">
+      <button class="btn ghost" (click)="showEditModal = false">Cancel</button>
+      <button class="btn primary" (click)="saveEdit()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ROLE MODAL -->
+<div class="modal-backdrop" *ngIf="showRoleModal">
+  <div class="modal">
+    <h3>Change Role</h3>
+
+    <select [(ngModel)]="selectedUser.role">
+      <option>Student</option>
+      <option>Teacher</option>
+      <option>Admin</option>
+    </select>
+
+    <div class="modal-actions">
+      <button class="btn ghost" (click)="showRoleModal = false">Cancel</button>
+      <button class="btn primary" (click)="saveRole()">Update</button>
+    </div>
+  </div>
+</div>
+
+<!-- DELETE CONFIRM -->
+<div class="modal-backdrop" *ngIf="showDeleteModal">
+  <div class="modal">
+    <h3>Delete User</h3>
+    <p>
+      Are you sure you want to delete
+      <strong>{{ selectedUser.username }}</strong
+      >?
+    </p>
+
+    <div class="modal-actions">
+      <button class="btn ghost" (click)="showDeleteModal = false">
+        Cancel
+      </button>
+      <button class="btn primary" (click)="deleteUser()">Delete</button>
+    </div>
+  </div>
+</div>
